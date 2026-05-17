@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65d2e2c2420ac6b45b0d480f9633fd48, type: 3}
+  m_Name: StationTurrte
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 6082468932349043140, guid: 978cd50cda4fc414a8f7cfa09e3bb7bb, type: 3}
+  _data:
+    _icon: {fileID: 0}
+    _name:
+      _ru:
+        _text: "\u0422\u0435\u0441\u0442"
+      _en:
+        _text: Test
+      _tr:
+        _text: Test
+    _description:
+      _ru:
+        _text: "\u0422\u0435\u0441\u0442"
+      _en:
+        _text: Test
+      _tr:
+        _text: Test
+    _constructionTime: 30
+  _components:
+  - {fileID: 11400000, guid: 3a2b253477cf0274598af07de37809f6, type: 2}
+  - {fileID: 11400000, guid: 4485fb472c2ad0440bb4d041bfcfb199, type: 2}
