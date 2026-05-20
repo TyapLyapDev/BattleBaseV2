@@ -4,6 +4,8 @@ namespace BattleBase.SaveService
 {
     public class YandexGameSaveSystemAdapter : ISaver
     {
+        private bool _isDirty;
+
         public IVolumeData VolumeData => Data.VolumeData;
 
         public IColorData ColorData => Data.ColorData;
@@ -12,22 +14,47 @@ namespace BattleBase.SaveService
 
         private SavesData Data => YG2.saves.SavesData;
 
-        public void SaveProgress() =>
-            YG2.SaveProgress();
+        public void SaveProgress()
+        {
+            if (_isDirty)
+            {
+                YG2.SaveProgress();
+                _isDirty = false;
+            }
+        }
 
         public void ResetProgress()
         {
             YG2.SetDefaultSaves();
+            _isDirty = true;
             SaveProgress();
         }
 
-        public void SetVolumeData(IVolumeData data) =>
-            Data.SetVolumeData(data);
+        public void SetVolumeData(IVolumeData data)
+        {
+            if (Data.VolumeData.IsChangedFrom(data))
+            {
+                Data.SetVolumeData(data);
+                _isDirty = true;
+            }
+        }
 
-        public void SetColorData(IColorData data) =>
-            Data.SetColorData(data);
+        public void SetColorData(IColorData data)
+        {
+            if (Data.ColorData.IsChangedFrom(data))
+            {
+                Data.SetColorData(data);
+                _isDirty = true;
+            }
+        }
 
-        public void SetTerritoryData(ITerritoryData data) =>
-            Data.SetTerritoryData(data);
+        public void SetTerritoryData(ITerritoryData data)
+        {
+            if (Data.TerritoryData.IsChangedFrom(data))
+            {
+                Data.SetTerritoryData(data);
+                _isDirty = true;
+            }
+        }
     }
 }

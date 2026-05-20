@@ -4,7 +4,7 @@ namespace BattleBase.Commands
 {
     public sealed class CommandNextLanguage : CommandBase
     {
-        protected override void OnExecute() =>
+        public override void Execute() =>
             YandexGameLanguageSystemAdapter.Next();
     }
 }

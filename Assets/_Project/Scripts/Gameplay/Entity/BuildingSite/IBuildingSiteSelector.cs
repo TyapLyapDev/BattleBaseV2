@@ -2,7 +2,7 @@ namespace BattleBase.Gameplay
 {
     public interface IBuildingSiteSelector
     {
-        public bool TrySelect(IBuildingSite site);
+        public bool TrySelect(ISelectable site);
 
         public void Unselect();
     }

@@ -38,7 +38,7 @@ namespace BattleBase.Gameplay.Map.Editor
 
         private static void OnSelectionChanged()
         {
-            if (Application.isPlaying) 
+            if (Application.isPlaying)
                 return;
 
             ResetColors();
@@ -92,7 +92,7 @@ namespace BattleBase.Gameplay.Map.Editor
             if (TwoWayDependency)
                 Undo.RecordObject(clicked, UndoMessage);
 
-            bool alreadyConnected = owner.Adjacents.Contains(clicked); 
+            bool alreadyConnected = owner.Adjacents.Contains(clicked);
 
             if (alreadyConnected)
                 owner.RemoveAdjacent(clicked);

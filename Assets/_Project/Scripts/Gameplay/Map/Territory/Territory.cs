@@ -7,7 +7,7 @@ namespace BattleBase.Gameplay.Map
     public class Territory : MonoBehaviour
     {
         [SerializeField] private List<Territory> _adjacents;
-        
+
         private TerritoryConfig _config;
 
         public event Action ColorChanged;
@@ -15,9 +15,9 @@ namespace BattleBase.Gameplay.Map
 
         public Transform Target => transform;
 
-        public Color? Color {  get; private set; }
+        public Color? Color { get; private set; }
 
-        public TerritoryOwnerType Owner {  get; private set; }
+        public TerritoryOwnerType Owner { get; private set; }
 
         public ITerritoryInfo Info => _config;
 
@@ -38,11 +38,10 @@ namespace BattleBase.Gameplay.Map
             OwnerChanged?.Invoke();
         }
 
-        // todo : вынести в редакторский скрипт
 #if UNITY_EDITOR
         public void AddAdjacent(Territory territory)
         {
-            if (territory == null || territory == this) 
+            if (territory == null || territory == this)
                 return;
 
             if (_adjacents.Contains(territory) == false)

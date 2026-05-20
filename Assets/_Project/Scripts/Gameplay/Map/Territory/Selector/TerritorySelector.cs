@@ -14,7 +14,7 @@ namespace BattleBase.Gameplay.Map
             if (territory == null)
                 throw new ArgumentNullException(nameof(territory));
 
-            if(territory == _selectedTerritory)
+            if (territory == _selectedTerritory)
             {
                 Unselect();
 

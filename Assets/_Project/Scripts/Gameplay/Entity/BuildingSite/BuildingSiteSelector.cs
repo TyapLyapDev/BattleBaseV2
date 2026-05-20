@@ -2,14 +2,14 @@ namespace BattleBase.Gameplay
 {
     public class BuildingSiteSelector : IBuildingSiteSelector
     {
-        private IBuildingSite _selected;
+        private ISelectable _selectable;
 
-        public bool TrySelect(IBuildingSite site)
+        public bool TrySelect(ISelectable site)
         {
             if (site.TrySelect())
             {
                 Unselect();
-                _selected = site;
+                _selectable = site;
 
                 return true;
             }
@@ -19,10 +19,10 @@ namespace BattleBase.Gameplay
 
         public void Unselect()
         {
-            if (_selected != null)
+            if (_selectable != null)
             {
-                _selected.Unselect();
-                _selected = null;
+                _selectable.Unselect();
+                _selectable = null;
             }
         }
     }

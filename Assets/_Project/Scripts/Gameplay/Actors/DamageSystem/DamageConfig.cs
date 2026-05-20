@@ -1,13 +1,13 @@
-﻿using BattleBase.Gameplay.Actors.DamageSystem;
+using BattleBase.Gameplay.Actors.DamageSystem;
 using BattleBase.Gameplay.Actors.Weapons.Missiles;
-using BattleBase.Utils;
+using BattleBase.Utils.Constants;
 using UnityEngine;
 
 namespace BattleBase.Gameplay.Actors
 {
     [CreateAssetMenu(
     fileName = nameof(DamageConfig),
-    menuName = Constants.ConfigsAssetMenuPath + nameof(ActorConfig) + "/" + nameof(DamageConfig))]
+    menuName = AssetMenuPaths.ScriptableObjects + nameof(ActorConfig) + "/" + nameof(DamageConfig))]
     public class DamageConfig : ScriptableObject, IDamageConfig
     {
         [SerializeField] private Missile _missilePrefab;

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e529f1bb7dc96b443b50abb16d30a70e, type: 3}
   m_Name: ShooterItemConfig
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 5840985984099297550, guid: 8cae44ff708ebc24c9c24be3f58dde26, type: 3}
+  _prefab: {fileID: 3653034493832603735, guid: 99cc26369e8f688469e6a79b1bff0284, type: 3}
   _sprite: {fileID: 21300000, guid: 899e9530ea411554a896015a262165e3, type: 3}
   _name:
     _ru:

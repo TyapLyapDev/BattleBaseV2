@@ -7,13 +7,13 @@ namespace BattleBase.Commands
 {
     public sealed class CommandShowInterstitialAdv : CommandBase, IInjectable
     {
-        private IAdvService _advService;
+        private IAdvertisingService _advService;
 
         [Inject]
-        public void Construct(IAdvService advService) =>
+        public void Construct(IAdvertisingService advService) =>
             _advService = advService ?? throw new ArgumentNullException(nameof(advService));
 
-        protected override void OnExecute() =>
+        public override void Execute() =>
             _advService.ShowInterstitialAdv();
     }
 }

@@ -1,11 +1,11 @@
-using BattleBase.Utils;
+using BattleBase.Utils.Constants;
 using UnityEngine;
 
 namespace BattleBase.Gameplay.CameraNavigation
 {
     [CreateAssetMenu(
         fileName = nameof(CameraConfig),
-        menuName = Constants.ConfigsAssetMenuPath + nameof(CameraConfig))]
+        menuName = AssetMenuPaths.ScriptableObjects + nameof(CameraConfig))]
     public class CameraConfig : ScriptableObject, ICameraInertiaConfig, ICameraSnapBackConfig, IOrthographicSizeConfig, ICameraTrackingConfig
     {
         [Header("Snap back")]

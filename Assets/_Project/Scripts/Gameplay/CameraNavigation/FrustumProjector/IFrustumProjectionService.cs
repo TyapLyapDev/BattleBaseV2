@@ -16,7 +16,7 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         public float CachedWidth { get; }
 
-        public void RefreshNow();
+        public void RefreshCache();
 
         public void ProjectCornersOntoPlaneFromPosition(Vector3 cameraPosition, List<Vector3> outCorners);
     }

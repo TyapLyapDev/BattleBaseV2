@@ -1,5 +1,5 @@
 using System;
-using BattleBase.Utils;
+using BattleBase.Utils.Constants;
 using UnityEngine;
 
 namespace BattleBase.Gameplay.CameraNavigation.InputReader
@@ -26,8 +26,8 @@ namespace BattleBase.Gameplay.CameraNavigation.InputReader
             if (deltaTime < 0)
                 throw new ArgumentOutOfRangeException(nameof(deltaTime), deltaTime, "Value must be positive");
 
-            float x = Input.GetAxisRaw(InputConstants.KeyboardAxisX);
-            float z = Input.GetAxisRaw(InputConstants.KeyboardAxisY);
+            float x = Input.GetAxisRaw(Inputs.KeyboardAxisX);
+            float z = Input.GetAxisRaw(Inputs.KeyboardAxisY);
 
             if (Mathf.Abs(x) > _axisThreshold || Mathf.Abs(z) > _axisThreshold)
             {

@@ -13,12 +13,12 @@ namespace BattleBase.Gameplay
     public class BuildingSiteMediator : MonoBehaviour, IInjectable
     {
         [SerializeField] private ProductionPanel _productionPanel;
-        [SerializeField] private CommandShowHidePopUps _commandShowProductionPanel;
-        [SerializeField] private CommandShowHidePopUps _commandHideProductionPanel;
+        [SerializeField] private CommandHidePopUps _commandShowProductionPanel;
+        [SerializeField] private CommandHidePopUps _commandHideProductionPanel;
 
         private List<IProductionItem> _items = new();
 
-        private IBuildingSite _currentSite;
+        private IEntity _selectedEntity;
         private IClickDetector _clickDetector;
         private IBuildingSiteSelector _selector;
         private IProductionItemFactory _productionItemFactory;
@@ -63,11 +63,11 @@ namespace BattleBase.Gameplay
 
         private void HandleSelectEntity(IEntity entity)
         {
-            _currentSite = null;
+            _selectedEntity = null;
 
-            if (entity is IBuildingSite buildingSite)
+            if (entity is ISelectable buildingSite)
             {
-                _currentSite = buildingSite;
+                _selectedEntity = entity;
                 _selector.TrySelect(buildingSite);
             }
 
@@ -99,15 +99,36 @@ namespace BattleBase.Gameplay
 
         private void OnItemClick(IProductionItem item)
         {
-            Transform target = _currentSite.Transform;
-            IEntity entity = _entityFactory.Create(item.Info.Prefab, target);
-            entity.SetPlayerMarker();
+            if (_selectedEntity == null)
+                return;
 
-            if (entity is Building building)
-                building.SetBuildingSite(_currentSite);
+            Entity prefab = item.Info.Prefab;
 
-            _currentSite.SetInactiveState();
-            HandleUnselectEntity();
+            if (prefab is Building buildingPrefab)
+            {
+                if (_selectedEntity is IBuildingSite buildingSite)
+                {
+                    Transform target = _selectedEntity.Transform;
+                    Building newBuilding = _entityFactory.Create(buildingPrefab, target);
+                    newBuilding.SetPlayerMarker();
+                    newBuilding.SetBuildingSite(buildingSite);
+                    buildingSite.SetInactiveState();
+                    HandleSelectEntity(newBuilding);
+                }                
+            }
+            else if (prefab is Unit unitPrefab)
+            {
+                if (_selectedEntity is Building building)
+                {
+                    Transform target = building.UnitSpawnPoint;
+                    Unit unit = _entityFactory.Create(unitPrefab, target);
+                    unit.SetPlayerMarker();
+                }
+            }
+            else
+            {
+                HandleUnselectEntity();
+            }
         }
     }
 }

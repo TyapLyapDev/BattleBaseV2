@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using BattleBase.Utils;
+using BattleBase.Utils.Extensions;
 using UnityEngine;
 
 namespace BattleBase.Gameplay.CameraNavigation
@@ -43,7 +43,7 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         public Vector3 GetCorrectionBounds(Bounds bounds, Vector3 position)
         {
-            if (VectorValidation.IsValid(position) == false)
+            if (position.IsValid() == false)
                 throw new ArgumentException($"Position is invalid (NaN or Infinity): {position}", nameof(position));
 
             List<Vector3> corners = new();

@@ -27,7 +27,7 @@ namespace BattleBase.Commands
                 _rectTransformList.Remove(rectTransform);
         }
 
-        protected override void OnExecute()
+        public override void Execute()
         {
             foreach (RectTransform rectTransform in _rectTransformList)
             {

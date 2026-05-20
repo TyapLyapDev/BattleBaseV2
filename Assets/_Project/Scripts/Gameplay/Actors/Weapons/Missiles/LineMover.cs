@@ -1,4 +1,4 @@
-﻿using BattleBase.Utils;
+using BattleBase.Utils.Extensions;
 using System;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace BattleBase.Gameplay.Actors.Weapons.Missiles
 
         public Vector3 CurrentPosition => _transform.position;
 
-        public bool IsFinished => VectorTool.IsWithinDistance(_transform.position, _pointPosition, _finishDistance);
+        public bool IsFinished => _transform.position.IsWithinDistance(_pointPosition, _finishDistance);
 
         private void Awake()
         {

@@ -21,5 +21,7 @@ namespace BattleBase.Gameplay
         public void SetItemInfos(IReadOnlyList<IProductionItemInfo> itemConfigs);
 
         public void SetPlayerMarker();
+
+        public void SetColor(Color color);
     }
 }

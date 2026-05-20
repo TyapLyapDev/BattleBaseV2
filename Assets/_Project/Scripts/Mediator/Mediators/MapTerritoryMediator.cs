@@ -103,7 +103,7 @@ namespace BattleBase.Mediators
 
         private void OnClick(Collider collider)
         {
-            if (collider.TryGetComponent(out Territory territory))
+            if (collider != null && collider.TryGetComponent(out Territory territory))
                 _territorySelector.Select(territory);
             else
                 _territorySelector.Unselect();

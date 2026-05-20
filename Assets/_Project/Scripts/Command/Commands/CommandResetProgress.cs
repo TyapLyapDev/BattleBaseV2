@@ -17,7 +17,7 @@ namespace BattleBase.Commands
         public void Construct(ISaver saver) =>
             _saver = saver ?? throw new ArgumentNullException(nameof(saver));
 
-        protected override void OnExecute()
+        public override void Execute()
         {
             _savingMediator.DisableSaving();
             _saver.ResetProgress();

@@ -10,6 +10,6 @@ namespace BattleBase.Gameplay
 
         public void SetMachineFactoryInfos(IReadOnlyList<IProductionItemInfo> machineFactoryItemInfos);
 
-        public IEntity Create(Entity prefab, Transform target);
+        public T Create<T>(T prefab, Transform target) where T : Entity;
     }
 }

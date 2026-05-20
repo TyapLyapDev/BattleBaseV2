@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using BattleBase.Utils;
+using BattleBase.Utils.Constants;
 using UnityEngine;
 
 namespace BattleBase.Gameplay.Map
 {
     [CreateAssetMenu(
         fileName = nameof(ColorSetConfig),
-        menuName = Constants.ConfigsAssetMenuPath + nameof(ColorSetConfig))]
+        menuName = AssetMenuPaths.ScriptableObjects + nameof(ColorSetConfig))]
     public class ColorSetConfig : ScriptableObject
     {
         [SerializeField] private List<Color> _colors;

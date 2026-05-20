@@ -10,13 +10,13 @@ namespace BattleBase.Commands
     {
         [SerializeField] private AudioClip _audioClip;
 
-        private IAudioService _audioService;
+        private IMusic _music;
 
         [Inject]
-        public void Construct(IAudioService audioService) =>
-            _audioService = audioService ?? throw new ArgumentNullException(nameof(audioService));
+        public void Construct(IMusic music) =>
+            _music = music ?? throw new ArgumentNullException(nameof(music));
 
-        protected override void OnExecute() =>
-            _audioService.Music.Play(_audioClip);
+        public override void Execute() =>
+            _music.Play(_audioClip);
     }
 }

@@ -6,7 +6,6 @@ using BattleBase.Gameplay.CameraNavigation.InputReader;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace BattleBase.Mediators
 {

@@ -1,5 +1,5 @@
 using System;
-using BattleBase.Utils;
+using BattleBase.Utils.Constants;
 using UnityEngine;
 
 namespace BattleBase.Gameplay.CameraNavigation.InputReader
@@ -24,7 +24,7 @@ namespace BattleBase.Gameplay.CameraNavigation.InputReader
             if(_uiPointerChecker.IsPointerOverUI(Input.mousePosition))
                 return null;
 
-            float scroll = Input.GetAxis(InputConstants.MouseScrollWheel);
+            float scroll = Input.GetAxis(Inputs.MouseScrollWheel);
 
             if (Mathf.Abs(scroll) > _scrollThreshold)
                 return scroll * _zoomSensitivity;

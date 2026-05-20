@@ -29,5 +29,14 @@ namespace BattleBase.SaveService
             _playerColorIndex = data.PlayerColorIndex;
             _enemyColorIndex = data.EnemyColorIndex;
         }
+
+        public bool IsChangedFrom(IColorData other)
+        {
+            if (other == null)
+                return true;
+
+            return PlayerColorIndex != other.PlayerColorIndex ||
+                   EnemyColorIndex != other.EnemyColorIndex;
+        }
     }
 }

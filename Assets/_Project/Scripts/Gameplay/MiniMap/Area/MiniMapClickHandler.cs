@@ -96,7 +96,7 @@ namespace BattleBase.Gameplay.MiniMap
             Vector3 restrictedPos = _positionRestrictor.Restrict(newPos, _cameraRig.transform.position);
             _cameraRig.transform.position = restrictedPos;
 
-            _frustumService.RefreshNow();
+            _frustumService.RefreshCache();
         }
 
         private Vector3 ComputeWorldPoint(Bounds bounds, float groundY, float normX, float normY)

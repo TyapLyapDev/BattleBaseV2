@@ -1,4 +1,4 @@
-using BattleBase.Utils;
+using BattleBase.Utils.Constants;
 using DG.Tweening;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ namespace BattleBase.Gameplay.Map
 {
     [CreateAssetMenu(
         fileName = nameof(TerritoryPositionAnimationConfig), 
-        menuName = Constants.ConfigsAssetMenuPath + nameof(TerritoryPositionAnimationConfig))]
+        menuName = AssetMenuPaths.ScriptableObjects + nameof(TerritoryPositionAnimationConfig))]
     public class TerritoryPositionAnimationConfig : ScriptableObject
     {
         [SerializeField] private float _duration = 0.3f;

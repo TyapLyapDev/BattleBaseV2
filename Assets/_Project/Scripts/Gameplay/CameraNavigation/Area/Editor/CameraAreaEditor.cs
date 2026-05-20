@@ -19,7 +19,7 @@ namespace BattleBase.Gameplay.CameraNavigation.Editor
         private static readonly Color s_FrustumColor = Color.yellow;
 
         [DrawGizmo(GizmoType.Selected | GizmoType.NonSelected)]
-        private static void DrawCameraAreaGizmos(CameraArea area, GizmoType gizmoType)
+        public static void DrawCameraAreaGizmos(CameraArea area, GizmoType _)
         {
             if (area == null)
                 return;
@@ -35,7 +35,7 @@ namespace BattleBase.Gameplay.CameraNavigation.Editor
             IUpdater updater = new EditorUpdater();
             ICameraAreaService areaService = new CameraAreaService(area);
             ICameraTracker cameraTracker = new CameraTracker(mainCamera, updater, area.Config);
-            IFrustumProjectionService projectionService = new FrustumProjectionService(mainCamera, areaService, cameraTracker);
+            IFrustumProjectionService projectionService = new FrustumProjectionService(areaService, cameraTracker);
 
             DrawArea(areaService);
             DrawFrustum(projectionService);

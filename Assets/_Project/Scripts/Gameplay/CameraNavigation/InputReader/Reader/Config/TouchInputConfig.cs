@@ -1,11 +1,11 @@
-using BattleBase.Utils;
+using BattleBase.Utils.Constants;
 using UnityEngine;
 
 namespace BattleBase.Gameplay.CameraNavigation.InputReader
 {
     [CreateAssetMenu(
         fileName = nameof(TouchInputConfig),
-        menuName = Constants.ConfigsAssetMenuPath + nameof(TouchInputConfig))]
+        menuName = AssetMenuPaths.ScriptableObjects + nameof(TouchInputConfig))]
     public class TouchInputConfig : ScriptableObject, ITouchConfig, IClickConfig
     {
         [SerializeField][Min(0.0001f)] private float _zoomSensitivity = 0.002f;

@@ -352,10 +352,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 41834583}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b687384755887af42ae66f6a086cb8e6, type: 3}
+  m_Script: {fileID: 11500000, guid: fd468710d94bf594aab178f89e93c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _popUpsToHide: []
   _popUpsToShow:
   - {fileID: 1678453581}
 --- !u!1 &54648510
@@ -7838,10 +7837,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 869942878}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b687384755887af42ae66f6a086cb8e6, type: 3}
+  m_Script: {fileID: 11500000, guid: fd468710d94bf594aab178f89e93c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _popUpsToHide: []
   _popUpsToShow:
   - {fileID: 1291722025}
 --- !u!1 &927422349
@@ -10622,7 +10620,6 @@ MonoBehaviour:
   - {fileID: 1291722025}
   - {fileID: 2038309401}
   - {fileID: 1678453581}
-  _popUpsToShow: []
 --- !u!114 &1070276218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11580,7 +11577,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1320628436}
-  - component: {fileID: 1320628435}
+  - component: {fileID: 1320628437}
   m_Layer: 0
   m_Name: CommandShowDialogResetProgress
   m_TagString: Untagged
@@ -11588,21 +11585,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 0
---- !u!114 &1320628435
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1320628434}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b687384755887af42ae66f6a086cb8e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _popUpsToHide: []
-  _popUpsToShow:
-  - {fileID: 2038309401}
 --- !u!4 &1320628436
 Transform:
   m_ObjectHideFlags: 0
@@ -11618,6 +11600,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 41168467}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1320628437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1320628434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd468710d94bf594aab178f89e93c007, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _popUpsToShow:
+  - {fileID: 2038309401}
 --- !u!1 &1323731855
 GameObject:
   m_ObjectHideFlags: 0
@@ -12188,10 +12184,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1485491386}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b687384755887af42ae66f6a086cb8e6, type: 3}
+  m_Script: {fileID: 11500000, guid: fd468710d94bf594aab178f89e93c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _popUpsToHide: []
   _popUpsToShow:
   - {fileID: 2144673242}
 --- !u!64 &1492910505
@@ -13512,7 +13507,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _commands.Array.data[2]
       value: 
-      objectReference: {fileID: 1320628435}
+      objectReference: {fileID: 1320628437}
     - target: {fileID: 4501102253757976282, guid: 9a71dcfb25e356044854cab27857a3f4,
         type: 3}
       propertyPath: _commands.Array.data[3]
@@ -13788,10 +13783,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1682443214}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b687384755887af42ae66f6a086cb8e6, type: 3}
+  m_Script: {fileID: 11500000, guid: fd468710d94bf594aab178f89e93c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _popUpsToHide: []
   _popUpsToShow:
   - {fileID: 472266178}
 --- !u!64 &1690499155
@@ -14370,17 +14364,7 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects:
-  - {fileID: 1661853818}
-  - {fileID: 276965428}
-  - {fileID: 2052060557}
-  - {fileID: 2104703340}
-  - {fileID: 1319283443}
-  - {fileID: 562984273}
-  - {fileID: 1990950054}
-  - {fileID: 1323731855}
-  - {fileID: 1197876494}
-  - {fileID: 1616386744}
-  - {fileID: 1074377339}
+  - {fileID: 954324417}
   _camera: {fileID: 2015845035}
   _cameraRig: {fileID: 927422351}
   _cameraArea: {fileID: 757988539}
@@ -14392,7 +14376,6 @@ MonoBehaviour:
     type: 2}
   _touchMapCameraConfig: {fileID: 11400000, guid: fcd90a5925a93074683c9a5cdba8a6b9,
     type: 2}
-  _cameraConfig: {fileID: 11400000, guid: 63b9ccbc3b019744ea3347f39c60f1b9, type: 2}
   _territoryPositionAnimationConfig: {fileID: 11400000, guid: ea79a8aa12c1d1548978bb1c3ec4b0c0,
     type: 2}
 --- !u!114 &1840346265

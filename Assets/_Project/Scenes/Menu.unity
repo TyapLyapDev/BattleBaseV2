@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 1892840}
   - component: {fileID: 1892841}
   m_Layer: 0
-  m_Name: HideAllPopUpsCommand
+  m_Name: CommandHideAllPopUps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,7 +174,6 @@ MonoBehaviour:
   - {fileID: 43507818}
   - {fileID: 2017069398}
   - {fileID: 1538378398}
-  _popUpsToShow: []
 --- !u!1 &17930716
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,7 +312,6 @@ Transform:
   m_Children:
   - {fileID: 1735762124}
   - {fileID: 889319953}
-  - {fileID: 312154968}
   - {fileID: 1398874148}
   - {fileID: 1186610035}
   - {fileID: 1213336418}
@@ -496,7 +494,7 @@ GameObject:
   - component: {fileID: 60828271}
   - component: {fileID: 60828272}
   m_Layer: 0
-  m_Name: ReloadCurrentSceneCommand
+  m_Name: CommandReloadCurrentScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -562,16 +560,7 @@ MonoBehaviour:
     TypeName: 
   autoRun: 1
   autoInjectGameObjects:
-  - {fileID: 17930716}
-  - {fileID: 262085289}
-  - {fileID: 1735762123}
-  - {fileID: 889319952}
-  - {fileID: 1398874147}
-  - {fileID: 1186610034}
-  - {fileID: 1213336417}
-  - {fileID: 840937193}
-  - {fileID: 1013308450}
-  - {fileID: 60828270}
+  - {fileID: 181945716}
 --- !u!4 &94164246
 Transform:
   m_ObjectHideFlags: 0
@@ -762,50 +751,6 @@ MonoBehaviour:
   _musicSlider: {fileID: 697637081}
   _sfxSlider: {fileID: 2014123961}
   _mixer: {fileID: 24100000, guid: 6425667c4d7ab5d4ba51ad913fa93ae7, type: 2}
---- !u!1 &312154967
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 312154968}
-  - component: {fileID: 312154969}
-  m_Layer: 0
-  m_Name: LoadMapSceneCommand (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
---- !u!4 &312154968
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 312154967}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 33360027}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &312154969
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 312154967}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b58aeeabdc532054293d61b2560cbad2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &345202921
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,7 +940,7 @@ GameObject:
   - component: {fileID: 395697106}
   - component: {fileID: 395697105}
   m_Layer: 0
-  m_Name: RebuildLayoutButtonResetProgressCommand
+  m_Name: CommandRebuildLayoutButtonResetProgress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1059,7 +1004,7 @@ GameObject:
   - component: {fileID: 457994783}
   - component: {fileID: 457994784}
   m_Layer: 0
-  m_Name: ShowLeaderboardPopUpCommand
+  m_Name: CommandShowLeaderboardPopUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1089,10 +1034,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 457994782}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b687384755887af42ae66f6a086cb8e6, type: 3}
+  m_Script: {fileID: 11500000, guid: fd468710d94bf594aab178f89e93c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _popUpsToHide: []
   _popUpsToShow:
   - {fileID: 2121700780}
 --- !u!1 &573278743
@@ -1106,7 +1050,7 @@ GameObject:
   - component: {fileID: 573278744}
   - component: {fileID: 573278745}
   m_Layer: 0
-  m_Name: NextLanguageCommand
+  m_Name: CommandNextLanguage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1265,7 +1209,7 @@ GameObject:
   - component: {fileID: 667751820}
   - component: {fileID: 667751821}
   m_Layer: 0
-  m_Name: ShowShopPopUpCommand
+  m_Name: CommandShowShopPopUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1295,10 +1239,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 667751819}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b687384755887af42ae66f6a086cb8e6, type: 3}
+  m_Script: {fileID: 11500000, guid: fd468710d94bf594aab178f89e93c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _popUpsToHide: []
   _popUpsToShow:
   - {fileID: 2017069398}
 --- !u!114 &697637081 stripped
@@ -1324,7 +1267,7 @@ GameObject:
   - component: {fileID: 840937194}
   - component: {fileID: 840937195}
   m_Layer: 0
-  m_Name: ShowInterstitialAdvCommand
+  m_Name: CommandShowInterstitialAdv
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1401,7 +1344,7 @@ GameObject:
   - component: {fileID: 889319953}
   - component: {fileID: 889319954}
   m_Layer: 0
-  m_Name: LoadMapSceneCommand
+  m_Name: CommandLoadMapScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1702,7 +1645,7 @@ GameObject:
   - component: {fileID: 980554234}
   - component: {fileID: 980554235}
   m_Layer: 0
-  m_Name: ShowSettingsPopUpCommand
+  m_Name: CommandShowSettingsPopUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1732,10 +1675,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 980554233}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b687384755887af42ae66f6a086cb8e6, type: 3}
+  m_Script: {fileID: 11500000, guid: fd468710d94bf594aab178f89e93c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _popUpsToHide: []
   _popUpsToShow:
   - {fileID: 423185700}
 --- !u!1 &1002130757
@@ -1749,7 +1691,7 @@ GameObject:
   - component: {fileID: 1002130758}
   - component: {fileID: 1002130759}
   m_Layer: 0
-  m_Name: ShowMenuButtonsPopUpCommand
+  m_Name: CommandShowMenuButtonsPopUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1779,10 +1721,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1002130757}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b687384755887af42ae66f6a086cb8e6, type: 3}
+  m_Script: {fileID: 11500000, guid: fd468710d94bf594aab178f89e93c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _popUpsToHide: []
   _popUpsToShow:
   - {fileID: 345202930}
 --- !u!1 &1013308450
@@ -1796,7 +1737,7 @@ GameObject:
   - component: {fileID: 1013308451}
   - component: {fileID: 1013308452}
   m_Layer: 0
-  m_Name: ResetProgressCommand
+  m_Name: CommandResetProgress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1841,7 +1782,7 @@ GameObject:
   - component: {fileID: 1186610035}
   - component: {fileID: 1186610036}
   m_Layer: 0
-  m_Name: PlayAudioButtonClickCommand
+  m_Name: CommandPlayAudioButtonClick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1886,7 +1827,7 @@ GameObject:
   - component: {fileID: 1213336418}
   - component: {fileID: 1213336419}
   m_Layer: 0
-  m_Name: PlayMenuMusicCommand
+  m_Name: CommandPlayMenuMusic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2041,7 +1982,7 @@ GameObject:
   - component: {fileID: 1288408061}
   - component: {fileID: 1288408062}
   m_Layer: 0
-  m_Name: InitAllPopUpsCommand
+  m_Name: CommandInitAllPopUps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2093,7 +2034,7 @@ GameObject:
   - component: {fileID: 1398874148}
   - component: {fileID: 1398874149}
   m_Layer: 0
-  m_Name: PlayAudioPopUpEnterCommand
+  m_Name: CommandPlayAudioPopUpEnter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2329,7 +2270,7 @@ GameObject:
   - component: {fileID: 1539263338}
   - component: {fileID: 1539263339}
   m_Layer: 0
-  m_Name: ShowAnticlickerCommand
+  m_Name: CommandShowAnticlicker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2359,10 +2300,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1539263337}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b687384755887af42ae66f6a086cb8e6, type: 3}
+  m_Script: {fileID: 11500000, guid: fd468710d94bf594aab178f89e93c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _popUpsToHide: []
   _popUpsToShow:
   - {fileID: 22450705}
 --- !u!1 &1624405596
@@ -2376,7 +2316,7 @@ GameObject:
   - component: {fileID: 1624405597}
   - component: {fileID: 1624405598}
   m_Layer: 0
-  m_Name: ShowDialogResetProgressCommand
+  m_Name: CommandShowDialogResetProgress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2406,10 +2346,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1624405596}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b687384755887af42ae66f6a086cb8e6, type: 3}
+  m_Script: {fileID: 11500000, guid: fd468710d94bf594aab178f89e93c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _popUpsToHide: []
   _popUpsToShow:
   - {fileID: 1538378398}
 --- !u!1 &1655447779
@@ -2467,7 +2406,7 @@ GameObject:
   - component: {fileID: 1735762124}
   - component: {fileID: 1735762125}
   m_Layer: 0
-  m_Name: LoadGameSceneCommand
+  m_Name: CommandLoadGameScene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2741,7 +2680,7 @@ GameObject:
   - component: {fileID: 1824056171}
   - component: {fileID: 1824056172}
   m_Layer: 0
-  m_Name: ShowLevelSelectorPopUpCommand
+  m_Name: CommandShowLevelSelectorPopUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2771,10 +2710,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1824056170}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b687384755887af42ae66f6a086cb8e6, type: 3}
+  m_Script: {fileID: 11500000, guid: fd468710d94bf594aab178f89e93c007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _popUpsToHide: []
   _popUpsToShow:
   - {fileID: 43507818}
 --- !u!1 &1921628147
@@ -2788,7 +2726,7 @@ GameObject:
   - component: {fileID: 1921628148}
   - component: {fileID: 1921628149}
   m_Layer: 0
-  m_Name: PreviosLanguageCommand
+  m_Name: CommandPreviosLanguage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

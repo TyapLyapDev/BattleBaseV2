@@ -1,6 +1,6 @@
 using System;
 using BattleBase.UpdateService;
-using BattleBase.Utils;
+using BattleBase.Utils.Constants;
 using UnityEngine;
 
 namespace BattleBase.Gameplay.CameraNavigation.InputReader
@@ -41,9 +41,9 @@ namespace BattleBase.Gameplay.CameraNavigation.InputReader
         {
             Vector2 mousePosition = Input.mousePosition;
 
-            if (Input.GetMouseButtonDown(InputConstants.DragMouseButton))
+            if (Input.GetMouseButtonDown(Inputs.DragMouseButton))
                 OnButtonDown(mousePosition);
-            else if (Input.GetMouseButtonUp(InputConstants.DragMouseButton))
+            else if (Input.GetMouseButtonUp(Inputs.DragMouseButton))
                 OnButtonUp(mousePosition);
         }
 

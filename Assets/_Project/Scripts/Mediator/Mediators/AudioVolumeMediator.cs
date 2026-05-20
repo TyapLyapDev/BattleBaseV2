@@ -2,7 +2,8 @@ using System;
 using BattleBase.AudioService;
 using BattleBase.DI;
 using BattleBase.SaveService;
-using BattleBase.Utils;
+using BattleBase.Utils.Constants;
+using BattleBase.Utils.Extensions;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -17,9 +18,6 @@ namespace BattleBase.Mediators
         [SerializeField] private Slider _sfxSlider;
         [SerializeField] private AudioMixer _mixer;
 
-        private VolumeModifier _generalModifier;
-        private VolumeModifier _musicModifier;
-        private VolumeModifier _sfxModifier;
         private IAudioVolumeSaver _saver;
 
         [Inject]
@@ -28,16 +26,20 @@ namespace BattleBase.Mediators
 
         private void OnDestroy()
         {
-            _generalModifier?.Dispose();
-            _musicModifier?.Dispose();
-            _sfxModifier?.Dispose();
+            _generalSlider.onValueChanged.RemoveListener(OnGeneralSliderChanged);
+            _musicSlider.onValueChanged.RemoveListener(OnMusicSliderChanged);
+            _sfxSlider.onValueChanged.RemoveListener(OnSfxSliderChanged);
         }
 
         public override void Init()
         {
-            _generalModifier = new(_mixer, _generalSlider, Constants.GeneralVolumeGroup);
-            _musicModifier = new(_mixer, _musicSlider, Constants.MusicVolumeGroup);
-            _sfxModifier = new(_mixer, _sfxSlider, Constants.SfxVolumeGroup);
+            _generalSlider.onValueChanged.AddListener(OnGeneralSliderChanged);
+            _musicSlider.onValueChanged.AddListener(OnMusicSliderChanged);
+            _sfxSlider.onValueChanged.AddListener(OnSfxSliderChanged);
+
+            OnGeneralSliderChanged(_generalSlider.value);
+            OnMusicSliderChanged(_musicSlider.value);
+            OnSfxSliderChanged(_sfxSlider.value);
         }
 
         public void Load()
@@ -53,5 +55,20 @@ namespace BattleBase.Mediators
             VolumeData data = new(_generalSlider.value, _musicSlider.value, _sfxSlider.value);
             _saver.SetVolumeData(data);
         }
+
+        private void SetVolume(Slider slider, string group)
+        {
+            float normalized = slider.value.Remap(slider.minValue, slider.maxValue);
+            AudioVolumeSetter.SetNormalizedVolume(_mixer, group, normalized);
+        }
+
+        private void OnGeneralSliderChanged(float _) => 
+            SetVolume(_generalSlider, AudioMixerGroupNames.General);
+
+        private void OnMusicSliderChanged(float _) => 
+            SetVolume(_musicSlider, AudioMixerGroupNames.Music);
+
+        private void OnSfxSliderChanged(float _) => 
+            SetVolume(_sfxSlider, AudioMixerGroupNames.Sfx);
     }
 }

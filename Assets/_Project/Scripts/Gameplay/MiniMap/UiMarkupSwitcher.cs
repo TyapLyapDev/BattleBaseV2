@@ -50,7 +50,7 @@ namespace BattleBase.Gameplay.MiniMap
             Vector3 angles = _cameraRig.transform.eulerAngles;
             angles.y = isPortrait ? _verticalCameraRotationY : _horizontalCameraRotationY;
             _cameraRig.transform.eulerAngles = angles;
-            _frustumProjectionService.RefreshNow();
+            _frustumProjectionService.RefreshCache();
             Vector3 newCenter = _frustumProjectionService.ProjectedCenter;
             Vector3 delta = oldCenter - newCenter;
             _cameraRig.position += delta;

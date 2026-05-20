@@ -34,5 +34,28 @@ namespace BattleBase.SaveService
             _musicVolume = data.MusicVolume;
             _sfxVolume = data.SfxVolume;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not VolumeData other) 
+                return false;
+
+            return Mathf.Approximately(GeneralVolume, other.GeneralVolume) &&
+                   Mathf.Approximately(MusicVolume, other.MusicVolume) &&
+                   Mathf.Approximately(SfxVolume, other.SfxVolume);
+        }
+
+        public override int GetHashCode() =>
+            HashCode.Combine(GeneralVolume, MusicVolume, SfxVolume);
+
+        public bool IsChangedFrom(IVolumeData other)
+        {
+            if (other == null) 
+                return true;
+
+            return Mathf.Approximately(GeneralVolume, other.GeneralVolume) == false ||
+                   Mathf.Approximately(MusicVolume, other.MusicVolume) == false ||
+                   Mathf.Approximately(SfxVolume, other.SfxVolume) == false;
+        }
     }
 }

@@ -11,7 +11,6 @@ namespace BattleBase.Gameplay.Map
         [SerializeField] private float _ownerColorBlackoutFactor = 0.2f;
 
         private Territory _territory;
-        private bool _subscribed;
 
         private void OnEnable() =>
             Subscribe();
@@ -21,8 +20,12 @@ namespace BattleBase.Gameplay.Map
 
         public void SetTerritory(Territory territory)
         {
-            _territory = territory != null ? territory : throw new ArgumentNullException(nameof(territory));
+            if (_territory == territory)
+                return;
 
+            Unsubscribe();
+
+            _territory = territory != null ? territory : throw new ArgumentNullException(nameof(territory));
             Transform territoryTransform = territory.transform;
             transform.SetParent(territoryTransform);
             transform.position = territoryTransform.position;
@@ -32,30 +35,20 @@ namespace BattleBase.Gameplay.Map
 
         private void Subscribe()
         {
-            if(_territory == null)
+            if (_territory == null)
                 return;
 
-            if(_subscribed) 
-                return;
-
-            _subscribed = true;
+            Unsubscribe();
 
             _territory.OwnerChanged += OnOwnerChanged;
-            OnOwnerChanged();
-
             _territory.ColorChanged += OnColorChanged;
-            OnColorChanged();
+            OnOwnerChanged();
         }
 
         private void Unsubscribe()
         {
             if (_territory == null)
                 return;
-
-            if (_subscribed == false)
-                return;
-
-            _subscribed = false;
 
             _territory.OwnerChanged -= OnOwnerChanged;
             _territory.ColorChanged -= OnColorChanged;

@@ -25,5 +25,25 @@ namespace BattleBase.SaveService
 
             _conqueredTerritories = new(data.ConqueredTerritories);
         }
+
+        public bool IsChangedFrom(ITerritoryData other)
+        {
+            if (other == null)
+                return true;
+
+            IReadOnlyList<int> current = ConqueredTerritories;
+            IReadOnlyList<int> newList = other.ConqueredTerritories;
+
+            if (current.Count != newList.Count)
+                return true;
+
+            for (int i = 0; i < current.Count; i++)
+            {
+                if (current[i] != newList[i])
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

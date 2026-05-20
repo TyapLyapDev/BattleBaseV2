@@ -1,5 +1,5 @@
 using System;
-using BattleBase.Utils;
+using BattleBase.Utils.Extensions;
 using UnityEngine;
 
 namespace BattleBase.Gameplay.CameraNavigation
@@ -17,10 +17,10 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         public Vector3 Calculate(Vector3 delta, Vector3 desiredPosition)
         {
-            if (VectorValidation.IsValid(delta) == false)
+            if (delta.IsValid() == false)
                 throw new ArgumentException($"Delta is invalid (NaN or Infinity): {delta}", nameof(delta));
             
-            if (VectorValidation.IsValid(desiredPosition) == false)
+            if (desiredPosition.IsValid() == false)
                 throw new ArgumentException($"Desired position is invalid (NaN or Infinity): {desiredPosition}", nameof(desiredPosition));
 
             float overshootX = _boundsLimiter.GetOvershootX(desiredPosition);

@@ -6,7 +6,7 @@ using BattleBase.Gameplay.CameraNavigation.InputReader;
 using BattleBase.Gameplay.MiniMap;
 using BattleBase.UI;
 using BattleBase.UI.PopUps;
-using BattleBase.Utils;
+using BattleBase.Utils.Constants;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -46,7 +46,7 @@ namespace BattleBase.DI
             _builder.RegisterInstance(_itemPrefab);
 
             _builder.RegisterComponent(_itemInfoPopUp);
-            _builder.RegisterInstance(_commandShowItemInfoPopUp).Keyed(Constants.KeyCommandShowItemInfoPopUp);
+            _builder.RegisterInstance(_commandShowItemInfoPopUp).Keyed(VContainerKeys.CommandShowItemInfoPopUp);
         }
 
         private void RegisterMiniMapSystem()

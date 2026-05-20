@@ -15,6 +15,6 @@ EditorBuildSettings:
     path: Assets/_Project/Scenes/Map.unity
     guid: fa1fe4c625bd1984db364f5a7047d9b9
   - enabled: 1
-    path: Assets/_Project/Scenes/old/FiXiK_tempScene.unity
-    guid: 3bba4d98408c2d441922916a97b48d0a
+    path: Assets/_Project/Scenes/Game.unity
+    guid: b5bced59043a7e1408a0a29f756574f2
   m_configObjects: {}

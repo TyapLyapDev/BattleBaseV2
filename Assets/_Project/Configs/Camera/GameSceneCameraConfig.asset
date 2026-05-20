@@ -15,7 +15,7 @@ MonoBehaviour:
   _snapBackSpeed: 60
   _referenceValuePortraitOrientation: {x: 1080, y: 1920}
   _minimumOrthoSize: 36
-  _maximumOrthoSize: 85
+  _maximumOrthoSize: 89
   _inertiaDamping: 2
   _inertiaExtraDampingFactor: 100
   _inertiaVelocityEpsilon: 0.01

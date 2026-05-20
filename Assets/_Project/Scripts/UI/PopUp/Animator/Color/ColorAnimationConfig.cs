@@ -1,4 +1,4 @@
-using BattleBase.Utils;
+using BattleBase.Utils.Constants;
 using DG.Tweening;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ namespace BattleBase.UI.PopUps
 {
     [CreateAssetMenu(
         fileName = nameof(ColorAnimationConfig),
-        menuName = Constants.ConfigsAssetMenuPath + nameof(ColorAnimationConfig))]
+        menuName = AssetMenuPaths.ScriptableObjects + nameof(ColorAnimationConfig))]
     public class ColorAnimationConfig : ScriptableObject
     {
         [SerializeField] private Color _targetColor;

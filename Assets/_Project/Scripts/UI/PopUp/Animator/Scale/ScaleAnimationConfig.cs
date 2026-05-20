@@ -1,4 +1,4 @@
-using BattleBase.Utils;
+using BattleBase.Utils.Constants;
 using DG.Tweening;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ namespace BattleBase.UI.PopUps
 {
     [CreateAssetMenu(
         fileName = nameof(ScaleAnimationConfig),
-        menuName = Constants.ConfigsAssetMenuPath + nameof(ScaleAnimationConfig))]
+        menuName = AssetMenuPaths.ScriptableObjects + nameof(ScaleAnimationConfig))]
     public class ScaleAnimationConfig : ScriptableObject
     { 
         [SerializeField] private Vector3 _startScale = Vector3.zero;

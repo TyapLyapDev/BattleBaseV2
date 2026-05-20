@@ -5,12 +5,15 @@ namespace BattleBase.Gameplay
 {
     public class BuildingSite : Entity, IBuildingSite
     {
-        [SerializeField] private Color _color;        
+        [SerializeField] private Transform _unitSpawnPoint;
         [SerializeField] private BuildingSiteState _state;
+        [SerializeField] private Color _color;        
 
         public event Action StateChanged;
 
         public BuildingSiteState State => _state;
+
+        public Transform UnitSpawnPoint => _unitSpawnPoint;
 
         private void Awake() =>
             SetColor(_color);

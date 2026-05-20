@@ -1,4 +1,3 @@
-using BattleBase.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,15 +9,17 @@ namespace BattleBase.Core
     {
         private readonly IFactory<T> _factory;
         private readonly Stack<T> _elements = new();
-        private readonly int _size;
+        private int _size = int.MaxValue;
 
         private int _count;
 
         public Pool(IFactory<T> factory)
         {
             _factory = factory ?? throw new ArgumentNullException(nameof(factory));
-            _size = Constants.PoolMaximumSize;
         }
+
+        public void SetSize(int size) =>
+            _size = size;
 
         public bool TryGive(out T element)
         {
@@ -47,7 +48,7 @@ namespace BattleBase.Core
         private T Create()
         {
             _count++;
-            T element = _factory.Create();            
+            T element = _factory.Create();
 
             return element;
         }

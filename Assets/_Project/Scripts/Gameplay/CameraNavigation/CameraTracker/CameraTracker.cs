@@ -25,17 +25,23 @@ namespace BattleBase.Gameplay.CameraNavigation
             CachedOrthoSize = _camera.orthographicSize;
 
             _updater.Subscribe(OnUpdate, s_UpdateType);
+            OnUpdate();
         }
 
         public event Action RotationChanged;
         public event Action PositionChanged;
         public event Action OrthoSizeChanged;
+        public event Action ProjectionChanged;
+
+        public Camera Camera => _camera;
 
         public Vector3 CachedPosition { get; private set; }
 
         public Quaternion CachedRotation { get; private set; }
 
         public float CachedOrthoSize { get; private set; }
+
+        public CameraProjectionType CachedProjectionType { get; private set; }
 
         public void Dispose() =>
             _updater?.Unsubscribe(OnUpdate, s_UpdateType);
@@ -64,6 +70,17 @@ namespace BattleBase.Gameplay.CameraNavigation
                 CachedOrthoSize = _camera.orthographicSize;
                 OrthoSizeChanged?.Invoke();
             }
+
+            CameraProjectionType currentProjection = GetProjectionType();
+
+            if (currentProjection != CachedProjectionType)
+            {
+                CachedProjectionType = currentProjection;
+                ProjectionChanged?.Invoke();
+            }
         }
+
+        private CameraProjectionType GetProjectionType() =>
+            _camera.orthographic ? CameraProjectionType.Orthographic : CameraProjectionType.Perspective;
     }
 }

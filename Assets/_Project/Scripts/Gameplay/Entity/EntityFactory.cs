@@ -33,9 +33,12 @@ namespace BattleBase.Gameplay
             _machineFactoryItemInfos = new(infos);
         }
 
-        public IEntity Create(Entity prefab, Transform target)
+        public T Create<T>(T prefab, Transform target) where T : Entity
         {
-            IEntity entity = UnityEngine.Object.Instantiate(prefab, target.position, target.rotation);
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+
+            T entity = UnityEngine.Object.Instantiate(prefab, target.position, target.rotation);
             _trackerFactory.CreateTracker(entity, PositionTrackingType.Static);
 
             if (entity is Barracks)

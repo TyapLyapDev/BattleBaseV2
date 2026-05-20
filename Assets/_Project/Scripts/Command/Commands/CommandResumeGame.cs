@@ -13,7 +13,7 @@ namespace BattleBase.Commands
         public void Construct(IPauseSwitcher pauseSwitcher) =>
             _pauseSwitcher = pauseSwitcher ?? throw new ArgumentNullException(nameof(pauseSwitcher));
 
-        protected override void OnExecute() =>
+        public override void Execute() =>
             _pauseSwitcher.Resume();
     }
 }

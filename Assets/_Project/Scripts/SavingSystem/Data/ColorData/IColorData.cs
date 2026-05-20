@@ -1,6 +1,6 @@
 namespace BattleBase.SaveService
 {
-    public interface IColorData
+    public interface IColorData : IChangeTrackable<IColorData>
     {
         public int PlayerColorIndex { get; }
 

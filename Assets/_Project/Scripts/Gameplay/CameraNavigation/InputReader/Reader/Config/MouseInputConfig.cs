@@ -1,11 +1,11 @@
-using BattleBase.Utils;
+using BattleBase.Utils.Constants;
 using UnityEngine;
 
 namespace BattleBase.Gameplay.CameraNavigation.InputReader
 {
     [CreateAssetMenu(
         fileName = nameof(MouseInputConfig),
-        menuName = Constants.ConfigsAssetMenuPath + nameof(MouseInputConfig))]
+        menuName = AssetMenuPaths.ScriptableObjects + nameof(MouseInputConfig))]
     public class MouseInputConfig : ScriptableObject, IZoomConfig, IDragConfig, IClickConfig
     {
         [SerializeField][Min(0.001f)] private float _keyboardSpeed = 1.4f;

@@ -12,7 +12,8 @@ namespace BattleBase.AudioService
             if (clip == null)
                 throw new ArgumentNullException(nameof(clip));
 
-            ValidateSource();
+            if (_source == null)
+                throw new InvalidOperationException($"{nameof(_source)} has not been assigned");
 
             _source.clip = clip;
             _source.Play();
@@ -20,14 +21,10 @@ namespace BattleBase.AudioService
 
         public void Stop()
         {
-            ValidateSource();
-            _source.Stop();
-        }
-
-        private void ValidateSource()
-        {
             if (_source == null)
-                throw new InvalidOperationException($"{nameof(_source)} has not been assigned.");
+                return;
+
+            _source.Stop();
         }
     }
 }
