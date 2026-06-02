@@ -37,7 +37,7 @@ namespace BattleBase.SaveService
 
         public override bool Equals(object obj)
         {
-            if (obj is not VolumeData other) 
+            if (obj is not VolumeData other)
                 return false;
 
             return Mathf.Approximately(GeneralVolume, other.GeneralVolume) &&
@@ -50,7 +50,7 @@ namespace BattleBase.SaveService
 
         public bool IsChangedFrom(IVolumeData other)
         {
-            if (other == null) 
+            if (other == null)
                 return true;
 
             return Mathf.Approximately(GeneralVolume, other.GeneralVolume) == false ||

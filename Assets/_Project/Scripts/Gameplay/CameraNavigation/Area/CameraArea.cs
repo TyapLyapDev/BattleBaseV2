@@ -6,15 +6,18 @@ namespace BattleBase.Gameplay.CameraNavigation
     [RequireComponent(typeof(BoxCollider))]
     public class CameraArea : MonoBehaviour, ICameraArea
     {
-        [SerializeField] private BoxCollider _collider;
-        [SerializeField][Min(0)] private float _resistanceFadeDistance = 0.5f;
-        [SerializeField][Range(0f, 1f)] private float _resistance = 0.8f;
-        [SerializeField] private bool _isStaticSizeCollider;
-        [SerializeField] private CameraConfig _cameraConfig;
-
 #if UNITY_EDITOR
         [SerializeField] private bool _shouldDrawGizmos;
 #endif
+
+        [SerializeField] private bool _isStaticSizeCollider;
+        [SerializeField][Range(0f, 1f)] private float _resistance = 0.8f;
+        [SerializeField] private BoxCollider _area;
+        [SerializeField] private BoxCollider _overshoot;
+
+        [field: SerializeField] public CameraConfig Config { get; private set; }
+
+        [field: SerializeField] public CameraRig CameraRig { get; private set; }
 
         private Vector3 _cachedColliderSize;
         private Vector3 _cachedColliderCenter;
@@ -22,34 +25,24 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         public event Action Changed;
 
+        public Bounds AreaBounds => _area.bounds;
+
+        public Bounds OvershootBounds => _overshoot.bounds;
+
+        public Plane GroundPlane => new(transform.up, GroundPlaneY);
+
         public float Resistance => _resistance;
 
-        public float ResistanceFadeDistance => _resistanceFadeDistance;
-
-        public CameraConfig Config => _cameraConfig;
+        public float GroundPlaneY => AreaBounds.center.y;
 
 #if UNITY_EDITOR
         public bool ShouldDrawGizmos => _shouldDrawGizmos;
 #endif
 
-        public BoxCollider Collider
+        private void Awake()
         {
-            get
-            {
-                EnsureComponents();
-
-                return _collider;
-            }
-        }
-
-        private void OnValidate() =>
-            InvokeChange();
-
-        private void Start()
-        {
-            EnsureComponents();
-            CacheColliderSize();
-            InvokeChange();
+            if (_area != null)
+                UpdateCachedColliderProperties();
         }
 
         private void Update()
@@ -57,40 +50,30 @@ namespace BattleBase.Gameplay.CameraNavigation
             if (_isStaticSizeCollider)
                 return;
 
-            if (_collider == null)
+            if (_area == null)
                 return;
 
-            if (_collider.size != _cachedColliderSize
-                || _collider.center != _cachedColliderCenter
+            if (_area.size != _cachedColliderSize
+                || _area.center != _cachedColliderCenter
                 || transform.localScale != _cachedLocalScale)
             {
-                CacheColliderSize();
-                InvokeChange();
+                UpdateCachedColliderProperties();
             }
         }
 
-        private void EnsureComponents()
+        public GroundProjection GetAreaGroundProjection(ScreenOrientationType orientationType) =>
+            AreaBounds.GetGroundProjection(CameraRig.transform.forward, CameraRig.transform.right);
+
+        public GroundProjection GetOvershootGroundProjection(ScreenOrientationType orientationType) =>
+            OvershootBounds.GetGroundProjection(CameraRig.transform.forward, CameraRig.transform.right);
+
+        private void UpdateCachedColliderProperties()
         {
-            if (_collider != null)
-                return;
+            _cachedColliderSize = _area.size;
+            _cachedColliderCenter = _area.center;
+            _cachedLocalScale = transform.localScale;
 
-            _collider = GetComponent<BoxCollider>();
-
-            if (_collider == null)
-                throw new ArgumentNullException(nameof(_collider));
-        }
-
-        private void CacheColliderSize()
-        {
-            if (_collider != null)
-            {
-                _cachedColliderSize = _collider.size;
-                _cachedColliderCenter = _collider.center;
-                _cachedLocalScale = transform.localScale;
-            }
-        }
-
-        private void InvokeChange() =>
             Changed?.Invoke();
+        }
     }
 }

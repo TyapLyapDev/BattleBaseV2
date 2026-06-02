@@ -13,30 +13,30 @@ namespace BattleBase.Gameplay.MiniMap
 
         private RectTransform _rectTransform;
 
-        private CameraRig _cameraRig;
-        private ICameraAreaService _areaService;
+        private ICameraHandle _cameraHandle;
+        private ICameraArea _area;
         private IFrustumProjectionService _frustumService;
-        private IPositionRestrictor _positionRestrictor;
         private IInertiaSnapbackApplier _inertiaApplier;
         private ICameraDragger _cameraDragger;
+        private ICameraSnapBack _snapBack;
 
         private bool _isDraggingMiniMap;
 
         [Inject]
         public void Construct(
-            CameraRig cameraRig,
-            ICameraAreaService areaService,
+            ICameraHandle cameraHandle,
+            ICameraArea area,
             IFrustumProjectionService frustumService,
-            IPositionRestrictor positionRestrictor,
             IInertiaSnapbackApplier inertiaApplier,
+            ICameraSnapBack snapBack,
             ICameraDragger cameraDragger)
         {
-            _cameraRig = cameraRig != null ? cameraRig : throw new ArgumentNullException(nameof(cameraRig));
-            _areaService = areaService ?? throw new ArgumentNullException(nameof(areaService));
+            _cameraHandle = cameraHandle ?? throw new ArgumentNullException(nameof(cameraHandle));
+            _area = area ?? throw new ArgumentNullException(nameof(area));
             _frustumService = frustumService ?? throw new ArgumentNullException(nameof(frustumService));
-            _positionRestrictor = positionRestrictor ?? throw new ArgumentNullException(nameof(positionRestrictor));
             _inertiaApplier = inertiaApplier ?? throw new ArgumentNullException(nameof(inertiaApplier));
             _cameraDragger = cameraDragger ?? throw new ArgumentNullException(nameof(cameraDragger));
+            _snapBack = snapBack ?? throw new ArgumentNullException(nameof(snapBack));
         }
 
         private void Awake()
@@ -57,7 +57,7 @@ namespace BattleBase.Gameplay.MiniMap
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (_isDraggingMiniMap == false) 
+            if (_isDraggingMiniMap == false)
                 return;
 
             MoveCameraToPointer(eventData);
@@ -65,7 +65,7 @@ namespace BattleBase.Gameplay.MiniMap
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if (_isDraggingMiniMap == false) 
+            if (_isDraggingMiniMap == false)
                 return;
 
             _isDraggingMiniMap = false;
@@ -75,9 +75,9 @@ namespace BattleBase.Gameplay.MiniMap
         private void MoveCameraToPointer(PointerEventData eventData)
         {
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    _rectTransform, 
-                    eventData.position, 
-                    eventData.pressEventCamera, 
+                    _rectTransform,
+                    eventData.position,
+                    eventData.pressEventCamera,
                     out Vector2 localPoint) == false)
             {
                 return;
@@ -87,16 +87,16 @@ namespace BattleBase.Gameplay.MiniMap
             float normX = Mathf.Clamp01((localPoint.x - rect.xMin) / rect.width);
             float normY = Mathf.Clamp01((localPoint.y - rect.yMin) / rect.height);
 
-            Bounds bounds = _areaService.AreaBounds;
-            float groundY = _areaService.GroundPlaneY;
+            Bounds bounds = _area.AreaBounds;
+            float groundY = _area.GroundPlaneY;
             Vector3 targetWorldPoint = ComputeWorldPoint(bounds, groundY, normX, normY);
 
-            Vector3 delta = targetWorldPoint - _frustumService.ProjectedCenter;
-            Vector3 newPos = _cameraRig.transform.position + delta;
-            Vector3 restrictedPos = _positionRestrictor.Restrict(newPos, _cameraRig.transform.position);
-            _cameraRig.transform.position = restrictedPos;
+            Vector3 delta = targetWorldPoint - _frustumService.Projection.Center;
+            
+            _cameraHandle.SetCameraRigPosition(_cameraHandle.CameraRig.transform.position + delta);
 
-            _frustumService.RefreshCache();
+            _frustumService.Refresh();
+            _snapBack.ClampByOvershoot();
         }
 
         private Vector3 ComputeWorldPoint(Bounds bounds, float groundY, float normX, float normY)

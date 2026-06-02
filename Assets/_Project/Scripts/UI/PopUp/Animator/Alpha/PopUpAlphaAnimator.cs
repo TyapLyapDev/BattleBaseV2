@@ -8,7 +8,7 @@ namespace BattleBase.UI.PopUps
     [RequireComponent(typeof(CanvasGroup))]
     public class PopUpAlphaAnimator : PopUpAnimatorBase
     {
-        [SerializeField] private AlphaAnimationConfig _showConfig; 
+        [SerializeField] private AlphaAnimationConfig _showConfig;
         [SerializeField] private AlphaAnimationConfig _hideConfig;
 
         private CanvasGroup _canvasGroup;
@@ -16,7 +16,7 @@ namespace BattleBase.UI.PopUps
         public override void Init()
         {
             if (_showConfig == null)
-                throw new NullReferenceException(nameof(_showConfig)); 
+                throw new NullReferenceException(nameof(_showConfig));
 
             if (_hideConfig == null)
                 throw new NullReferenceException(nameof(_showConfig));

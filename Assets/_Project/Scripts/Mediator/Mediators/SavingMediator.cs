@@ -9,7 +9,7 @@ namespace BattleBase.Mediators
 {
     public class SavingMediator : MediatorBase, IInjectable
     {
-        [SerializeField] private List<MonoBehaviour> _saveables;  
+        [SerializeField] private List<MonoBehaviour> _saveables;
 
         private bool _isSaving = true;
 
@@ -17,7 +17,7 @@ namespace BattleBase.Mediators
 
         [Inject]
         public void Construct(ISaver saver) =>
-            _saver = saver ?? throw new ArgumentNullException(nameof(saver));            
+            _saver = saver ?? throw new ArgumentNullException(nameof(saver));
 
         private void OnDisable()
         {

@@ -12,7 +12,7 @@ namespace BattleBase.Gameplay.Map
 
         public event Action<ColorBox> Clicked;
 
-        public Color Color {  get; private set; }
+        public Color Color { get; private set; }
 
         public int Index { get; private set; } = -1;
 

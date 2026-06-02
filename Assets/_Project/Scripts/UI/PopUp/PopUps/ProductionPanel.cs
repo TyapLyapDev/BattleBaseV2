@@ -6,7 +6,7 @@ namespace BattleBase.UI.PopUps
     {
         public void ClearContext()
         {
-            foreach(Transform child in transform)
+            foreach (Transform child in transform)
                 Destroy(child.gameObject);
         }
 

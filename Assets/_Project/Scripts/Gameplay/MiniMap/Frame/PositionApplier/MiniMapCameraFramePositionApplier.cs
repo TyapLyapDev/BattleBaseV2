@@ -12,19 +12,19 @@ namespace BattleBase.Gameplay.MiniMap
         [SerializeField] private MiniMapArea _miniMapArea;
 
         private MiniMapCameraFrame _frame;
-        private ICameraAreaService _cameraAreaService;
+        private ICameraArea _cameraArea;
         private IFrustumProjectionService _frustumProjectionService;
-        private ICameraTracker _cameraTracker;
+        private ICameraHandle _cameraTracker;
         private IFramePositionCalculator _calculator;
 
         [Inject]
         public void Construct(
-            ICameraTracker cameraTracker,
-            ICameraAreaService cameraAreaService,
+            ICameraHandle cameraTracker,
+            ICameraArea cameraArea,
             IFrustumProjectionService frustumProjectionService)
         {
             _cameraTracker = cameraTracker ?? throw new ArgumentNullException(nameof(cameraTracker));
-            _cameraAreaService = cameraAreaService ?? throw new ArgumentNullException(nameof(cameraAreaService));
+            _cameraArea = cameraArea ?? throw new ArgumentNullException(nameof(cameraArea));
             _frustumProjectionService = frustumProjectionService ?? throw new ArgumentNullException(nameof(frustumProjectionService));
 
             _frame = GetComponent<MiniMapCameraFrame>();
@@ -38,7 +38,7 @@ namespace BattleBase.Gameplay.MiniMap
         {
             _miniMapArea.SizeChanged += OnAreaChanged;
             _cameraTracker.PositionChanged += UpdatePosition;
-            _cameraAreaService.Changed += UpdatePosition;
+            _cameraArea.Changed += UpdatePosition;
             OnAreaChanged();
             UpdatePosition();
         }
@@ -47,7 +47,7 @@ namespace BattleBase.Gameplay.MiniMap
         {
             _miniMapArea.SizeChanged -= OnAreaChanged;
             _cameraTracker.PositionChanged -= UpdatePosition;
-            _cameraAreaService.Changed -= UpdatePosition;
+            _cameraArea.Changed -= UpdatePosition;
         }
 
         private void OnAreaChanged() =>
@@ -57,8 +57,8 @@ namespace BattleBase.Gameplay.MiniMap
         {
             FramePositionInput input = new()
             {
-                WorldCenter = _frustumProjectionService.ProjectedCenter,
-                AreaBounds = _cameraAreaService.AreaBounds,
+                WorldCenter = _frustumProjectionService.Projection.Center,
+                AreaBounds = _cameraArea.AreaBounds,
                 MiniMapRect = _miniMapArea.Rect
             };
 

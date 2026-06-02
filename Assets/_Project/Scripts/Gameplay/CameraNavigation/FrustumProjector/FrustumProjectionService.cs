@@ -1,61 +1,46 @@
 using System;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace BattleBase.Gameplay.CameraNavigation
 {
     public class FrustumProjectionService : IFrustumProjectionService, IDisposable
     {
-        private readonly FrustumProjectionCache _cache = new();
         private readonly FrustumProjectionEventSubscriber _subscriber;
-        private readonly ICameraAreaService _areaService;
-        private readonly ICameraTracker _cameraTracker;
+        private readonly ICameraArea _area;
+        private readonly ICameraHandle _cameraTracker;
 
-        public FrustumProjectionService(ICameraAreaService areaService, ICameraTracker cameraTracker)
+        public FrustumProjectionService(ICameraArea area, ICameraHandle cameraTracker)
         {
-            _areaService = areaService ?? throw new ArgumentNullException(nameof(areaService));
+            _area = area ?? throw new ArgumentNullException(nameof(area));
             _cameraTracker = cameraTracker ?? throw new ArgumentNullException(nameof(cameraTracker));
 
             _subscriber = new FrustumProjectionEventSubscriber(
-                _areaService,
+                _area,
                 _cameraTracker,
-                RefreshCache);
-
-            RefreshCache();
+                Refresh);
         }
 
         public event Action Changed;
 
-        public IReadOnlyList<Vector3> Corners => _cache.Corners;
-
-        public Vector3 ProjectedCenter => _cache.ProjectedCenter;
-
-        public float CachedHeight => _cache.CachedHeight;
-
-        public float CachedWidth => _cache.CachedWidth;
+        public FrustumProjection Projection { get; private set; }
 
         public void Dispose() =>
             _subscriber?.Dispose();
 
-        public void ProjectCornersOntoPlaneFromPosition(Vector3 cameraPosition, List<Vector3> outCorners)
+        public GroundProjection GetProjection(FrustumSizeType frustumSize, FrustumShape shape)
         {
-            Plane plane = new(Vector3.up, _areaService.GroundPlaneY);
-
-            CameraProjectionUtility.GetProjectedCorners(
-                _cameraTracker.Camera,
-                cameraPosition,
-                plane,
-                _cameraTracker.CachedProjectionType,
-                outCorners);
+            return CameraProjectionUtility.ConvertProjection(
+                Projection,
+                _area.CameraRig.transform, 
+                frustumSize, 
+                shape);
         }
 
-        public void RefreshCache()
+        public void Refresh()
         {
-            _cache.Recalculate(
+            Projection = CameraProjectionUtility.GetFrustumProjection(
                 _cameraTracker.Camera,
-                _cameraTracker.CachedPosition,
-                _areaService,
-                _cameraTracker.CachedProjectionType);
+                _area.GroundPlane,
+                _cameraTracker.ProjectionType);
 
             Changed?.Invoke();
         }

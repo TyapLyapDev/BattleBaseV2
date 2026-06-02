@@ -7,19 +7,28 @@ namespace BattleBase.Gameplay.CameraNavigation
         private const float DefaultFactor = 1f;
         private const float SinEpsilon = 0.001f;
 
-        private readonly Camera _camera;
+        private readonly ICameraHandle _cameraHandle;
+        private readonly IProjectionSizeConfig _config;
 
-        public VerticalFactorCalculator(Camera camera)
+        public VerticalFactorCalculator(ICameraHandle cameraHandle, IProjectionSizeConfig config)
         {
-            _camera = camera != null ? camera : throw new System.ArgumentNullException(nameof(camera));
+            _cameraHandle = cameraHandle ?? throw new System.ArgumentNullException(nameof(cameraHandle));
+            _config = config ?? throw new System.ArgumentNullException(nameof(config));
         }
 
         public float CalculateVerticalFactor()
         {
-            float angleX = Mathf.Abs(_camera.transform.eulerAngles.x);
-            float sin = Mathf.Sin(angleX * Mathf.Deg2Rad);
+            if (_cameraHandle.ProjectionType == CameraProjectionType.Orthographic)
+            {
+                float angleX = Mathf.Abs(_cameraHandle.Camera.transform.eulerAngles.x);
+                float sin = Mathf.Sin(angleX * Mathf.Deg2Rad);
 
-            return sin > SinEpsilon ? 1f / sin : DefaultFactor;
+                return sin > SinEpsilon ? 1f / sin : DefaultFactor;
+            }
+            else
+            {
+                return _config.LandscapeFovFactor;
+            }
         }
     }
 }

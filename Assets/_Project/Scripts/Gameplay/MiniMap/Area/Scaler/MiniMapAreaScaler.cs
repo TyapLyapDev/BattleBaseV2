@@ -10,13 +10,13 @@ namespace BattleBase.Gameplay.MiniMap
     public class MiniMapAreaScaler : MonoBehaviour, IInjectable
     {
         private MiniMapArea _miniMapArea;
-        private ICameraAreaService _cameraAreaService;
+        private ICameraArea _cameraArea;
         private IAreaSizeCalculator _calculator;
 
         [Inject]
-        public void Construct(ICameraAreaService areaService)
+        public void Construct(ICameraArea area)
         {
-            _cameraAreaService = areaService ?? throw new ArgumentNullException(nameof(areaService));
+            _cameraArea = area ?? throw new ArgumentNullException(nameof(area));
             _miniMapArea = GetComponent<MiniMapArea>();
 
             _calculator = _miniMapArea.Orientation == ScreenOrientationType.Portrait
@@ -26,16 +26,16 @@ namespace BattleBase.Gameplay.MiniMap
 
         private void OnEnable()
         {
-            _cameraAreaService.Changed += UpdateAreaSize;
+            _cameraArea.Changed += UpdateAreaSize;
             UpdateAreaSize();
         }
 
         private void OnDisable() =>
-            _cameraAreaService.Changed -= UpdateAreaSize;
+            _cameraArea.Changed -= UpdateAreaSize;
 
         private void UpdateAreaSize()
         {
-            Bounds bounds = _cameraAreaService.AreaBounds;
+            Bounds bounds = _cameraArea.AreaBounds;
             Vector2 worldSize = new(bounds.size.x, bounds.size.z);
             Vector2 currentSize = new(_miniMapArea.Rect.width, _miniMapArea.Rect.height);
 

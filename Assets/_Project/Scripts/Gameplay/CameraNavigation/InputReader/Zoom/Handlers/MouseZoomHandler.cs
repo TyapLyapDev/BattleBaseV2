@@ -21,7 +21,7 @@ namespace BattleBase.Gameplay.CameraNavigation.InputReader
 
         public float? Update()
         {
-            if(_uiPointerChecker.IsPointerOverUI(Input.mousePosition))
+            if (_uiPointerChecker.IsPointerOverUI(Input.mousePosition))
                 return null;
 
             float scroll = Input.GetAxis(Inputs.MouseScrollWheel);

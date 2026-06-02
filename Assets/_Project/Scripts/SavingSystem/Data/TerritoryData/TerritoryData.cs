@@ -7,7 +7,7 @@ namespace BattleBase.SaveService
     [Serializable]
     public class TerritoryData : ITerritoryData
     {
-        [SerializeField] private List<int> _conqueredTerritories = new() { 0, };
+        [SerializeField] private List<int> _conqueredTerritories = new() { 0, 1, 5, 9 };
 
         public TerritoryData() { }
 

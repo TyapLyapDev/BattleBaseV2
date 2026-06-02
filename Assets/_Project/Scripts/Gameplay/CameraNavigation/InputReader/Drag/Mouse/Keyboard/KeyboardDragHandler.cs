@@ -6,15 +6,15 @@ namespace BattleBase.Gameplay.CameraNavigation.InputReader
 {
     public class KeyboardDragHandler : IKeyboardDragHandler
     {
-        private readonly ICameraOrientationAdapter _orientationAdapter;
+        private readonly ICameraHandle _cameraHandle;
         private readonly float _keyboardSpeed;
         private readonly float _axisThreshold;
 
-        public KeyboardDragHandler(IDragConfig config, ICameraOrientationAdapter orientationAdapter)
+        public KeyboardDragHandler(IDragConfig config, ICameraHandle cameraHandle)
         {
-            _orientationAdapter = orientationAdapter ?? throw new ArgumentNullException(nameof(orientationAdapter));
-            
-            if(config == null)
+            _cameraHandle = cameraHandle ?? throw new ArgumentNullException(nameof(cameraHandle));
+
+            if (config == null)
                 throw new ArgumentNullException(nameof(config));
 
             _keyboardSpeed = config.KeyboardSpeed;
@@ -31,7 +31,7 @@ namespace BattleBase.Gameplay.CameraNavigation.InputReader
 
             if (Mathf.Abs(x) > _axisThreshold || Mathf.Abs(z) > _axisThreshold)
             {
-                float zoomFactor = _orientationAdapter.CurrentOrthoSize;
+                float zoomFactor = _cameraHandle.ProjectionSize;
                 float finalSpeed = _keyboardSpeed * zoomFactor;
                 Vector3 move = finalSpeed * deltaTime * new Vector3(x, 0, z);
 

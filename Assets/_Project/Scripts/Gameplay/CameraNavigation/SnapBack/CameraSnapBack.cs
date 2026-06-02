@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using BattleBase.Utils.Extensions;
 using UnityEngine;
 
@@ -7,101 +6,85 @@ namespace BattleBase.Gameplay.CameraNavigation
 {
     public class CameraSnapBack : ICameraSnapBack
     {
-        private const float Half = 0.5f;
-
-        private readonly Transform _cameraRig;
         private readonly IFrustumProjectionService _frustumProjectionService;
-        private readonly ICameraAreaService _cameraAreaService;
-        private readonly ICameraSnapBackConfig _snapBackConfig;
+        private readonly ICameraArea _cameraArea;
 
         public CameraSnapBack(
-            CameraRig cameraRig,
             IFrustumProjectionService frustumProjectionService,
-            ICameraAreaService cameraAreaService,
-            ICameraSnapBackConfig snapBackConfig)
+            ICameraArea cameraArea)
         {
-            _cameraRig = cameraRig != null ? cameraRig.transform : throw new ArgumentNullException(nameof(cameraRig));
             _frustumProjectionService = frustumProjectionService ?? throw new ArgumentNullException(nameof(frustumProjectionService));
-            _cameraAreaService = cameraAreaService ?? throw new ArgumentNullException(nameof(cameraAreaService));
-            _snapBackConfig = snapBackConfig ?? throw new ArgumentNullException(nameof(snapBackConfig));
+            _cameraArea = cameraArea ?? throw new ArgumentNullException(nameof(cameraArea));
         }
-
-        public float Speed => _snapBackConfig.SnapBackSpeed;
 
         public void ClampByOvershoot()
         {
-            Vector3 position = _cameraRig.position;
+            _frustumProjectionService.Refresh();
+            Transform cameraRig = _cameraArea.CameraRig.transform;
+            Vector3 position = cameraRig.position;
+
             Vector3 correction = GetCorrectionOvershootBounds(position);
-            _cameraRig.position = position + correction;
+            cameraRig.position = position + correction;
         }
 
         public Vector3 GetCorrectionAreaBounds(Vector3 position) =>
-            GetCorrectionBounds(_cameraAreaService.AreaBounds, position);
+            GetCorrectionBounds(_cameraArea.AreaBounds, position);
 
         public Vector3 GetCorrectionOvershootBounds(Vector3 position) =>
-            GetCorrectionBounds(_cameraAreaService.OvershootBounds, position);
+            GetCorrectionBounds(_cameraArea.OvershootBounds, position);
 
         public Vector3 GetCorrectionBounds(Bounds bounds, Vector3 position)
         {
             if (position.IsValid() == false)
                 throw new ArgumentException($"Position is invalid (NaN or Infinity): {position}", nameof(position));
 
-            List<Vector3> corners = new();
-            _frustumProjectionService.ProjectCornersOntoPlaneFromPosition(position, corners);
+            GroundProjection projection = _frustumProjectionService.GetProjection(
+                FrustumSizeType.MinimumWidthAndHeight, 
+                FrustumShape.Rectangle);
 
-            Vector2 minMaxX = GetMinMax(corners, true);
-            Vector2 minMaxZ = GetMinMax(corners, false);
+            Vector3 leftUp = projection.LeftUp;
+            Vector3 leftDown = projection.LeftDown;
+            Vector3 rightUp = projection.RightUp;
+            Vector3 rightDown = projection.RightDown;
+
+            float minimumX = Mathf.Min(leftUp.x, leftDown.x, rightUp.x, rightDown.x);
+            float maximumX = Mathf.Max(leftUp.x, leftDown.x, rightUp.x, rightDown.x);
+            float minimumZ = Mathf.Min(leftUp.z, leftDown.z, rightUp.z, rightDown.z);
+            float maximumZ = Mathf.Max(leftUp.z, leftDown.z, rightUp.z, rightDown.z);
+
             Vector3 correction = Vector3.zero;
 
             correction.x = CalculateCorrection(
-                minMaxX.x, minMaxX.y,
+                minimumX, maximumX,
                 bounds.min.x, bounds.max.x,
+                projection.Center.x,
                 bounds.center.x);
 
             correction.z = CalculateCorrection(
-                minMaxZ.x, minMaxZ.y,
+                minimumZ, maximumZ,
                 bounds.min.z, bounds.max.z,
+                projection.Center.z,
                 bounds.center.z);
 
             return correction;
         }
 
-        private Vector2 GetMinMax(List<Vector3> corners, bool isX)
+        private float CalculateCorrection(
+            float minimum,
+            float maximum,
+            float boundMinimum,
+            float boundMaximum,
+            float frustumCenter,
+            float boundCenter)
         {
-            float min = float.MaxValue;
-            float max = float.MinValue;
-
-            foreach (Vector3 corner in corners)
-            {
-                float value = isX ? corner.x : corner.z;
-
-                if (value < min)
-                    min = value;
-
-                if (value > max)
-                    max = value;
-            }
-
-            return new Vector2(min, max);
-        }
-
-        private float CalculateCorrection(float min, float max, float boundMin, float boundMax, float boundCenter)
-        {
-            bool minInside = min >= boundMin;
-            bool maxInside = max <= boundMax;
-
-            if (minInside == false && maxInside == false)
-            {
-                float frustumCenter = (min + max) * Half;
-
+            if (Mathf.Abs(minimum - maximum) > Mathf.Abs(boundMinimum - boundMaximum))
                 return boundCenter - frustumCenter;
-            }
 
-            if (minInside == false)
-                return boundMin - min;
+            if (minimum < boundMinimum)
+                return boundMinimum - minimum;
 
-            if (maxInside == false)
-                return boundMax - max;
+            if (maximum > boundMaximum)
+                return boundMaximum - maximum;
 
             return 0f;
         }

@@ -1,6 +1,6 @@
 namespace BattleBase.SaveService
 {
-    public interface ISaveable 
+    public interface ISaveable
     {
         public void Load();
 

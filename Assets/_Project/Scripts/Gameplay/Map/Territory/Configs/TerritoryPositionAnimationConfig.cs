@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BattleBase.Gameplay.Map
 {
     [CreateAssetMenu(
-        fileName = nameof(TerritoryPositionAnimationConfig), 
+        fileName = nameof(TerritoryPositionAnimationConfig),
         menuName = AssetMenuPaths.ScriptableObjects + nameof(TerritoryPositionAnimationConfig))]
     public class TerritoryPositionAnimationConfig : ScriptableObject
     {

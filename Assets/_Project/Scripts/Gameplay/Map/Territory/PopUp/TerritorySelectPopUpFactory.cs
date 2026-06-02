@@ -11,7 +11,7 @@ namespace BattleBase.Gameplay.Map
         private readonly IObjectResolver _resolver;
 
         public TerritorySelectPopUpFactory(
-            TerritorySelectPopUp prefab, 
+            TerritorySelectPopUp prefab,
             IObjectResolver resolver)
         {
             _prefab = prefab != null ? prefab : throw new ArgumentNullException(nameof(prefab));

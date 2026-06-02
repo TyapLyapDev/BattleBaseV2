@@ -11,5 +11,5 @@ namespace BattleBase
         {
             Type = type ?? throw new ArgumentNullException(nameof(type));
         }
-    }                                                                                                                  
+    }
 }

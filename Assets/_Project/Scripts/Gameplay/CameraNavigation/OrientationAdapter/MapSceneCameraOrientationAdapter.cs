@@ -14,9 +14,9 @@ namespace BattleBase.Gameplay.CameraNavigation
         private float _effectiveMaximumOrthoSize;
 
         public MapSceneCameraOrientationAdapter(
-            Camera camera, 
-            IScreenOrientationTracker orientationTracker, 
-            IOrthographicSizeConfig config)
+            Camera camera,
+            IScreenOrientationTracker orientationTracker,
+            IProjectionSizeConfig config)
         {
             _camera = camera != null ? camera : throw new ArgumentNullException(nameof(camera));
             _orientationTracker = orientationTracker ?? throw new ArgumentNullException(nameof(orientationTracker));
@@ -48,11 +48,11 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         public event Action Changed;
 
-        public float CurrentOrthoSize => _camera.orthographicSize;
+        public float CurrentSize => _camera.orthographicSize;
 
-        public float MinimumOrthoSize => _effectiveMinimumOrthoSize;
+        public float MinimumSize => _effectiveMinimumOrthoSize;
 
-        public float MaximumOrthoSize => _effectiveMaximumOrthoSize;
+        public float MaximumSize => _effectiveMaximumOrthoSize;
 
         public void Dispose()
         {
@@ -98,7 +98,7 @@ namespace BattleBase.Gameplay.CameraNavigation
                 throw new ArgumentOutOfRangeException(nameof(range), range, "Value must be positive");
 
             float normalized = (currentSize - minimumBound) / range;
-            
+
             return 1f - normalized;
         }
 

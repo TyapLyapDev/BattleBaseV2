@@ -62,13 +62,13 @@ namespace BattleBase.Mediators
             AudioVolumeSetter.SetNormalizedVolume(_mixer, group, normalized);
         }
 
-        private void OnGeneralSliderChanged(float _) => 
+        private void OnGeneralSliderChanged(float _) =>
             SetVolume(_generalSlider, AudioMixerGroupNames.General);
 
-        private void OnMusicSliderChanged(float _) => 
+        private void OnMusicSliderChanged(float _) =>
             SetVolume(_musicSlider, AudioMixerGroupNames.Music);
 
-        private void OnSfxSliderChanged(float _) => 
+        private void OnSfxSliderChanged(float _) =>
             SetVolume(_sfxSlider, AudioMixerGroupNames.Sfx);
     }
 }

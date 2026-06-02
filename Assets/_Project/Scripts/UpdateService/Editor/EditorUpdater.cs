@@ -25,7 +25,7 @@ namespace BattleBase.UpdateService.Editor
 
         public IUpdater Subscribe(Action action, UpdateType updateType)
         {
-            if (action == null) 
+            if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
             _updateActions[action] = updateType;
@@ -35,7 +35,7 @@ namespace BattleBase.UpdateService.Editor
 
         public IUpdater Subscribe(Action<float> action, UpdateType updateType)
         {
-            if (action == null) 
+            if (action == null)
                 throw new ArgumentNullException(nameof(action));
 
             _updateFloatActions[action] = updateType;
@@ -45,7 +45,7 @@ namespace BattleBase.UpdateService.Editor
 
         public IUpdater Unsubscribe(Action action, UpdateType updateType)
         {
-            if (action != null) 
+            if (action != null)
                 _updateActions.Remove(action);
 
             return this;
@@ -53,7 +53,7 @@ namespace BattleBase.UpdateService.Editor
 
         public IUpdater Unsubscribe(Action<float> action, UpdateType updateType)
         {
-            if (action != null) 
+            if (action != null)
                 _updateFloatActions.Remove(action);
 
             return this;

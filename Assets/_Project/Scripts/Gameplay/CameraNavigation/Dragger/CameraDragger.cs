@@ -7,13 +7,18 @@ namespace BattleBase.Gameplay.CameraNavigation
     {
         private readonly IDragApplier _dragApplier;
         private readonly IInertiaSnapbackApplier _inertiaApplier;
+        private readonly ICameraSnapBack _snapBack;
 
         private bool _enabled = true;
 
-        public CameraDragger(IDragApplier dragApplier, IInertiaSnapbackApplier inertiaSnapbackApplier)
+        public CameraDragger(
+            IDragApplier dragApplier,
+            IInertiaSnapbackApplier inertiaSnapbackApplier,
+            ICameraSnapBack snapBack)
         {
             _dragApplier = dragApplier ?? throw new ArgumentNullException(nameof(dragApplier));
             _inertiaApplier = inertiaSnapbackApplier ?? throw new ArgumentNullException(nameof(inertiaSnapbackApplier));
+            _snapBack = snapBack ?? throw new ArgumentNullException(nameof(snapBack));
         }
 
         public void Enable() =>
@@ -24,7 +29,7 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         public void Update(float deltaTime, Vector3? worldDragDelta)
         {
-            if(_enabled == false)
+            if (_enabled == false)
                 return;
 
             if (deltaTime < 0)
@@ -39,6 +44,8 @@ namespace BattleBase.Gameplay.CameraNavigation
             {
                 _inertiaApplier.Apply(deltaTime);
             }
+
+            _snapBack.ClampByOvershoot();
         }
     }
 }

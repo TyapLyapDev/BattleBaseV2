@@ -16,18 +16,18 @@ namespace BattleBase.Gameplay.MiniMap
         private readonly Dictionary<IEntityTracker, IconMapObject> _icons = new();
 
         private IEntityTrackersRegistry _objectRegistry;
-        private ICameraAreaService _areaService;
+        private ICameraArea _area;
         private IPool<IconMapObject> _pool;
         private IIconSizeCalculator _calculator;
 
         [Inject]
         public void Construct(
             IEntityTrackersRegistry objectRegistry,
-            ICameraAreaService areaService,
+            ICameraArea area,
             IPool<IconMapObject> pool)
         {
             _objectRegistry = objectRegistry ?? throw new ArgumentNullException(nameof(objectRegistry));
-            _areaService = areaService ?? throw new ArgumentNullException(nameof(areaService));
+            _area = area ?? throw new ArgumentNullException(nameof(area));
             _pool = pool ?? throw new ArgumentNullException(nameof(pool));
 
             _calculator = _mapArea.Orientation == ScreenOrientationType.Portrait
@@ -39,7 +39,7 @@ namespace BattleBase.Gameplay.MiniMap
         {
             _objectRegistry.Added += OnTrackerAdded;
             _objectRegistry.Removed += OnTrackerRemoved;
-            _areaService.Changed += OnAreaChanged;
+            _area.Changed += OnAreaChanged;
             _mapArea.SizeChanged += OnMiniMapSizeChanged;
             RebuildAllIcons();
         }
@@ -48,7 +48,7 @@ namespace BattleBase.Gameplay.MiniMap
         {
             _objectRegistry.Added -= OnTrackerAdded;
             _objectRegistry.Removed -= OnTrackerRemoved;
-            _areaService.Changed -= OnAreaChanged;
+            _area.Changed -= OnAreaChanged;
             _mapArea.SizeChanged -= OnMiniMapSizeChanged;
             ClearAllIcons();
         }
@@ -108,7 +108,7 @@ namespace BattleBase.Gameplay.MiniMap
 
         private void UpdateIconSize(IconMapObject icon, Vector2 worldSize)
         {
-            Bounds bounds = _areaService.AreaBounds;
+            Bounds bounds = _area.AreaBounds;
             Rect rect = _mapArea.Rect;
 
             Vector2 size = _calculator.GetIconSize(worldSize, bounds, rect);
@@ -117,7 +117,7 @@ namespace BattleBase.Gameplay.MiniMap
 
         private void UpdateIconPosition(IEntityTracker tracker, IconMapObject icon)
         {
-            Bounds bounds = _areaService.AreaBounds;
+            Bounds bounds = _area.AreaBounds;
             Rect rect = _mapArea.Rect;
 
             Vector2 uiPosition = _calculator.WorldToMiniMapPosition(tracker.WorldPosition, bounds, rect);

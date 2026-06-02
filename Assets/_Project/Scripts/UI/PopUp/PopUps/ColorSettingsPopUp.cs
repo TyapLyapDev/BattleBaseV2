@@ -7,7 +7,7 @@ namespace BattleBase.UI.PopUps
 {
     public class ColorSettingsPopUp : PopUp
     {
-        [SerializeField] private ColorSet _playerColorSet; 
+        [SerializeField] private ColorSet _playerColorSet;
         [SerializeField] private ColorSet _enemyColorSet;
 
         public event Action Changed;

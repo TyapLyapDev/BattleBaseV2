@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace BattleBase.Gameplay.CameraNavigation
 {
@@ -8,16 +6,10 @@ namespace BattleBase.Gameplay.CameraNavigation
     {
         public event Action Changed;
 
-        public Vector3 ProjectedCenter { get; }
+        public FrustumProjection Projection { get; }
 
-        public IReadOnlyList<Vector3> Corners { get; }
+        public GroundProjection GetProjection(FrustumSizeType frustumSize, FrustumShape shape);
 
-        public float CachedHeight { get; }
-
-        public float CachedWidth { get; }
-
-        public void RefreshCache();
-
-        public void ProjectCornersOntoPlaneFromPosition(Vector3 cameraPosition, List<Vector3> outCorners);
+        public void Refresh();
     }
 }

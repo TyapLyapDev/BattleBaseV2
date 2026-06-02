@@ -13,8 +13,6 @@ namespace BattleBase.Gameplay
     public class BuildingSiteMediator : MonoBehaviour, IInjectable
     {
         [SerializeField] private ProductionPanel _productionPanel;
-        [SerializeField] private CommandHidePopUps _commandShowProductionPanel;
-        [SerializeField] private CommandHidePopUps _commandHideProductionPanel;
 
         private List<IProductionItem> _items = new();
 
@@ -65,19 +63,19 @@ namespace BattleBase.Gameplay
         {
             _selectedEntity = null;
 
-            if (entity is ISelectable buildingSite)
+            if (entity is ISelectable selectable)
             {
                 _selectedEntity = entity;
-                _selector.TrySelect(buildingSite);
+                _selector.TrySelect(selectable);
             }
 
             _productionPanel.ClearContext();
             _items = _productionItemFactory.Create(entity.ProductionItemInfos);
 
             if (_items.Count == 0)
-                _commandHideProductionPanel.Execute();
+                _productionPanel.Hide();
             else
-                _commandShowProductionPanel.Execute();
+                _productionPanel.Show();
 
             foreach (IProductionItem item in _items)
             {
@@ -89,7 +87,7 @@ namespace BattleBase.Gameplay
         private void HandleUnselectEntity()
         {
             _selector.Unselect();
-            _commandHideProductionPanel.Execute();
+            _productionPanel.Hide();
 
             foreach (IProductionItem item in _items)
                 item.ItemClicked -= OnItemClick;
@@ -114,7 +112,7 @@ namespace BattleBase.Gameplay
                     newBuilding.SetBuildingSite(buildingSite);
                     buildingSite.SetInactiveState();
                     HandleSelectEntity(newBuilding);
-                }                
+                }
             }
             else if (prefab is Unit unitPrefab)
             {

@@ -5,7 +5,7 @@ namespace BattleBase.AdvService
 {
     public class YandexGameAdvertisingAdapter : IAdvertisingService, IDisposable
     {
-        public YandexGameAdvertisingAdapter() 
+        public YandexGameAdvertisingAdapter()
         {
             YG2.onRewardAdv += OnReward;
         }

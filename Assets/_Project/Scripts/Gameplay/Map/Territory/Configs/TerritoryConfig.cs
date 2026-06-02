@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BattleBase.Gameplay.Map
 {
     [CreateAssetMenu(
-        fileName = nameof(TerritoryConfig), 
+        fileName = nameof(TerritoryConfig),
         menuName = AssetMenuPaths.ScriptableObjects + nameof(TerritoryConfig))]
     public class TerritoryConfig : ScriptableObject, ITerritoryInfo
     {

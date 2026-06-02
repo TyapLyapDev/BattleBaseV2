@@ -6,17 +6,19 @@ namespace BattleBase.Gameplay.CameraNavigation
     {
         private readonly IScreenSizeTracker _screenSizeTracker;
 
+        private ScreenOrientationType _lastOrientation;
+
         public ScreenOrientationTracker(IScreenSizeTracker screenSizeTracker)
         {
             _screenSizeTracker = screenSizeTracker ?? throw new ArgumentNullException(nameof(screenSizeTracker));
 
-            ScreenOrientation = GetScreenOrientation();
+            _lastOrientation = GetScreenOrientation();
             _screenSizeTracker.SizeChanged += OnSizeChanged;
         }
 
         public event Action OrientationChanged;
 
-        public ScreenOrientationType ScreenOrientation { get; private set; }
+        public ScreenOrientationType ScreenOrientation => GetScreenOrientation();
 
         public int Width => _screenSizeTracker.Width;
 
@@ -27,7 +29,7 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         private ScreenOrientationType GetScreenOrientation()
         {
-            if(_screenSizeTracker.Height > _screenSizeTracker.Width)
+            if (_screenSizeTracker.Height > _screenSizeTracker.Width)
                 return ScreenOrientationType.Portrait;
             else
                 return ScreenOrientationType.Landscape;
@@ -37,10 +39,11 @@ namespace BattleBase.Gameplay.CameraNavigation
         {
             ScreenOrientationType currentScreenOrientation = GetScreenOrientation();
 
-            if (currentScreenOrientation == ScreenOrientation)
+            if (currentScreenOrientation == _lastOrientation)
                 return;
 
-            ScreenOrientation = currentScreenOrientation;
+            _lastOrientation = currentScreenOrientation;
+
             OrientationChanged?.Invoke();
         }
     }

@@ -7,10 +7,20 @@ namespace BattleBase.Gameplay.CameraNavigation
     {
         public event Action Changed;
 
-        public BoxCollider Collider { get; }
+        public CameraRig CameraRig { get; }
+
+        public Bounds AreaBounds { get; }
+
+        public Bounds OvershootBounds { get; }
+
+        public Plane GroundPlane { get; }
 
         public float Resistance { get; }
 
-        public float ResistanceFadeDistance { get; }
+        public float GroundPlaneY { get; }
+
+        public GroundProjection GetAreaGroundProjection(ScreenOrientationType orientationType);
+
+        public GroundProjection GetOvershootGroundProjection(ScreenOrientationType orientationType);
     }
 }

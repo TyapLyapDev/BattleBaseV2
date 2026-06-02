@@ -11,7 +11,7 @@ namespace BattleBase.Commands
 
         public void Add(RectTransform rectTransform)
         {
-            if(rectTransform == null)
+            if (rectTransform == null)
                 throw new ArgumentNullException(nameof(rectTransform));
 
             if (_rectTransformList.Contains(rectTransform) == false)

@@ -7,7 +7,7 @@ namespace BattleBase.Gameplay
     {
         [SerializeField] private Transform _unitSpawnPoint;
         [SerializeField] private BuildingSiteState _state;
-        [SerializeField] private Color _color;        
+        [SerializeField] private Color _color;
 
         public event Action StateChanged;
 
@@ -33,7 +33,7 @@ namespace BattleBase.Gameplay
 
         public void Unselect()
         {
-            if(IsPlayer && _state == BuildingSiteState.Selected)
+            if (IsPlayer && _state == BuildingSiteState.Selected)
             {
                 _state = BuildingSiteState.Active;
                 StateChanged?.Invoke();

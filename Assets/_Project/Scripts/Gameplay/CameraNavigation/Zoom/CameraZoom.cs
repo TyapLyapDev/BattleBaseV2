@@ -3,15 +3,17 @@ using UnityEngine;
 
 namespace BattleBase.Gameplay.CameraNavigation
 {
-    public class CameraZoom : ICameraZoom
+    public class CameraZoom : ICameraZoom, IDisposable
     {
-        private readonly Camera _camera;
+        private readonly ICameraHandle _cameraHandle;
         private readonly ICameraOrientationAdapter _orientationAdapter;
 
-        public CameraZoom(Camera camera, ICameraOrientationAdapter orientationAdapter)
+        public CameraZoom(ICameraHandle cameraHandle, ICameraOrientationAdapter orientationAdapter)
         {
-            _camera = camera != null ? camera : throw new ArgumentNullException(nameof(camera));
+            _cameraHandle = cameraHandle ?? throw new ArgumentNullException(nameof(cameraHandle));
             _orientationAdapter = orientationAdapter ?? throw new ArgumentNullException(nameof(orientationAdapter));
+
+            _orientationAdapter.Changed += OnOrientationAdapterChanged;
         }
 
         public event Action Changed;
@@ -20,45 +22,55 @@ namespace BattleBase.Gameplay.CameraNavigation
         {
             get
             {
-                float range = MaximumZoom - MinimumZoom;
+                float range = MaximumSize - MinimumSize;
 
                 if (range <= 0f)
-                    throw new ArgumentOutOfRangeException(nameof(range), range, "Value must be positive");
+                    throw new InvalidOperationException("Invalid size range");
 
-                float normalized = (_camera.orthographicSize - MinimumZoom) / range;
+                float normalized = (CurrentSize - MinimumSize) / range;
 
                 return 1f - normalized;
             }
         }
 
-        private float MinimumZoom => _orientationAdapter.MinimumOrthoSize;
+        private float CurrentSize => _orientationAdapter.CurrentSize;
 
-        private float MaximumZoom => _orientationAdapter.MaximumOrthoSize;
+        private float MinimumSize => _orientationAdapter.MinimumSize;
+
+        private float MaximumSize => _orientationAdapter.MaximumSize;
+
+        public void Dispose() =>
+            _orientationAdapter.Changed -= OnOrientationAdapterChanged;
 
         public void SetValue01(float value)
         {
-            float maximumZoom = MaximumZoom;
-            float minimumZoom = MinimumZoom;
-
             float clampedValue = Mathf.Clamp01(value);
-            float range = maximumZoom - minimumZoom;
-            float targetSize = maximumZoom - clampedValue * range;
+            float targetSize = MaximumSize - clampedValue * (MaximumSize - MinimumSize);
             SetCameraSize(targetSize);
         }
 
         public void Update(float? zoomDelta)
         {
-            if (zoomDelta.HasValue == false)
-                return;
-
-            float newSize = _camera.orthographicSize - zoomDelta.Value;
-            SetCameraSize(newSize);
+            if (zoomDelta.HasValue)
+            {
+                float newSize = CurrentSize - zoomDelta.Value;
+                SetCameraSize(newSize);
+            }           
         }
 
         private void SetCameraSize(float size)
         {
-            _camera.orthographicSize = Mathf.Clamp(size, MinimumZoom, MaximumZoom);
-            Changed?.Invoke();
+            float clamped = Mathf.Clamp(size, MinimumSize, MaximumSize);
+
+            if (Mathf.Approximately(CurrentSize, clamped) == false)
+            {
+                _cameraHandle.SetProjectionSize(clamped);
+
+                Changed?.Invoke();
+            }            
         }
+
+        private void OnOrientationAdapterChanged() =>
+            Changed?.Invoke();
     }
 }

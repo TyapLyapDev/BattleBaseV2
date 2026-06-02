@@ -42,7 +42,7 @@ namespace BattleBase.UI
             _itemButton.Clicked -= OnItemButton;
             _moreInfoButton.Clicked -= OnMoreInfoClicked;
         }
-            
+
         public void SetParent(Transform parent) =>
             transform.SetParent(parent, false);
 

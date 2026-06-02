@@ -8,7 +8,7 @@ namespace BattleBase.UI.PopUps
         fileName = nameof(ScaleAnimationConfig),
         menuName = AssetMenuPaths.ScriptableObjects + nameof(ScaleAnimationConfig))]
     public class ScaleAnimationConfig : ScriptableObject
-    { 
+    {
         [SerializeField] private Vector3 _startScale = Vector3.zero;
         [SerializeField] private Vector3 _targetScale = Vector3.one;
         [SerializeField][Min(0)] private float _duration = 0.2f;

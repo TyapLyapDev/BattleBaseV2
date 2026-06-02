@@ -16,7 +16,7 @@ namespace BattleBase.Gameplay.CameraNavigation.InputReader
         private bool _isBlockedByUI;
 
         public MouseDragHandler(
-            Camera camera, 
+            Camera camera,
             IUIPointerChecker uiPointerChecker,
             IDragConfig config)
         {

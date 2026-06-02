@@ -8,7 +8,7 @@ namespace BattleBase.UI.PopUps
     public class PopUpScaleAnimator : PopUpAnimatorBase
     {
         [SerializeField] private ScaleAnimationConfig _showConfig;
-        [SerializeField] private ScaleAnimationConfig _hideConfig; 
+        [SerializeField] private ScaleAnimationConfig _hideConfig;
 
         private Transform _transform;
 

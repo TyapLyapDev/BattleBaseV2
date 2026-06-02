@@ -14,7 +14,7 @@ namespace BattleBase.SceneLoadingService
         private Transform _transform;
         private float _anglePerJump;
         private float _delayBetweenJumps;
-        private WaitForSecondsRealtime _timeWait; 
+        private WaitForSecondsRealtime _timeWait;
 
         private void Awake()
         {

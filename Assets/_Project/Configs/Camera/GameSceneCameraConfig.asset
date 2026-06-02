@@ -16,10 +16,13 @@ MonoBehaviour:
   _referenceValuePortraitOrientation: {x: 1080, y: 1920}
   _minimumOrthoSize: 36
   _maximumOrthoSize: 89
+  _minimumFOV: 10
+  _maximumFOV: 59.5
+  _landscapeFovFactor: 1.2
   _inertiaDamping: 2
   _inertiaExtraDampingFactor: 100
   _inertiaVelocityEpsilon: 0.01
   _inertiaSmoothingWindow: 4
-  _positionSqrThreshold: 0.0001
+  _positionSqrThreshold: 0.01
   _rotationAngleThreshold: 0.01
   _orthoSizeThreshold: 0.0001

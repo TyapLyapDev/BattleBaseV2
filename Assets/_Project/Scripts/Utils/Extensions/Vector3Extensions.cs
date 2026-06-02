@@ -1,23 +1,9 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BattleBase.Utils.Extensions
 {
     public static class Vector3Extensions
     {
-        public static Vector3 Average(this IReadOnlyList<Vector3> vectors)
-        {
-            if (vectors == null || vectors.Count == 0)
-                return Vector3.zero;
-
-            Vector3 sum = Vector3.zero;
-
-            for (int i = 0; i < vectors.Count; i++)
-                sum += vectors[i];
-
-            return sum / vectors.Count;
-        }
-
         public static bool IsValid(this Vector3 v)
         {
             return float.IsNaN(v.x) == false

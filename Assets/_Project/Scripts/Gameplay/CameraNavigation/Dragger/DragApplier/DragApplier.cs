@@ -5,28 +5,28 @@ namespace BattleBase.Gameplay.CameraNavigation
 {
     public class DragApplier : IDragApplier
     {
-        private readonly Transform _cameraRig;
-        private readonly IResistanceCalculator _resistance;
-        private readonly IPositionRestrictor _restrictor;
+        private readonly ICameraHandle _cameraHandle;
+        private readonly IResistanceCalculator _resistanceCalculator;
 
-        public DragApplier(CameraRig cameraRig, IResistanceCalculator resistance, IPositionRestrictor restrictor)
+        public DragApplier(
+            ICameraHandle cameraHandle, 
+            IResistanceCalculator resistanceCalculator)
         {
-            if (cameraRig == null)
-                throw new ArgumentNullException(nameof(cameraRig));
-
-            _cameraRig = cameraRig.transform;
-            _resistance = resistance ?? throw new ArgumentNullException(nameof(resistance));
-            _restrictor = restrictor ?? throw new ArgumentNullException(nameof(restrictor));
+            _cameraHandle = cameraHandle ?? throw new ArgumentNullException(nameof(cameraHandle));
+            _resistanceCalculator = resistanceCalculator ?? throw new ArgumentNullException(nameof(resistanceCalculator));
         }
 
         public void Apply(Vector3 worldDelta)
         {
-            Vector3 deltaGround = _cameraRig.right * worldDelta.x + _cameraRig.forward * worldDelta.z;
+            Transform rig = _cameraHandle.CameraRig.transform;
+
+            Vector3 deltaGround = rig.right * worldDelta.x + rig.forward * worldDelta.z;
             deltaGround.y = 0;
-            Vector3 desiredPos = _cameraRig.position - deltaGround;
-            Vector3 correctedDelta = _resistance.Calculate(deltaGround, desiredPos);
-            Vector3 finalPos = _cameraRig.position - correctedDelta;
-            _cameraRig.position = _restrictor.Restrict(finalPos, _cameraRig.position);
+
+            Vector3 desiredPosition = rig.position - deltaGround;
+            Vector3 correctedDelta = _resistanceCalculator.Calculate(deltaGround, desiredPosition);
+
+            rig.position -= correctedDelta;
         }
     }
 }

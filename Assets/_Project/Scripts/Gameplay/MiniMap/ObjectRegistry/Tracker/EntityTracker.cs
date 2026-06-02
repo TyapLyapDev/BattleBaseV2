@@ -11,7 +11,7 @@ namespace BattleBase.Gameplay.MiniMap
         private readonly IEntityRotationTracker _rotationTracker;
 
         public EntityTracker(
-            IEntity entity, 
+            IEntity entity,
             IEntitySizeTracker sizeTracker,
             IEntityPositionTracker positionTracker,
             IEntityRotationTracker rotationTracker)

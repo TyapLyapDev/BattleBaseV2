@@ -44,7 +44,7 @@ namespace BattleBase.Mediators
         {
             if (_territories == null)
                 throw new NullReferenceException(nameof(_territories));
-           
+
             if (_territoryConfigs == null)
                 throw new NullReferenceException(nameof(_territoryConfigs));
 

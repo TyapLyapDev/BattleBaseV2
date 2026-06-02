@@ -5,15 +5,15 @@ namespace BattleBase.Gameplay.CameraNavigation
     public class FrustumProjectionEventSubscriber : IDisposable
     {
         private readonly Action _refreshCallback;
-        private readonly ICameraAreaService _areaService;
-        private readonly ICameraTracker _cameraTracker;
+        private readonly ICameraArea _area;
+        private readonly ICameraHandle _cameraTracker;
 
         public FrustumProjectionEventSubscriber(
-            ICameraAreaService areaService,
-            ICameraTracker cameraTracker,
+            ICameraArea area,
+            ICameraHandle cameraTracker,
             Action refreshCallback)
         {
-            _areaService = areaService ?? throw new ArgumentNullException(nameof(areaService));
+            _area = area ?? throw new ArgumentNullException(nameof(area));
             _cameraTracker = cameraTracker ?? throw new ArgumentNullException(nameof(cameraTracker));
             _refreshCallback = refreshCallback ?? throw new ArgumentNullException(nameof(refreshCallback));
 
@@ -25,19 +25,19 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         private void Subscribe()
         {
-            _areaService.Changed += _refreshCallback;
+            _area.Changed += _refreshCallback;
             _cameraTracker.PositionChanged += _refreshCallback;
             _cameraTracker.RotationChanged += _refreshCallback;
-            _cameraTracker.OrthoSizeChanged += _refreshCallback;
+            _cameraTracker.SizeChanged += _refreshCallback;
             _cameraTracker.ProjectionChanged += _refreshCallback;
         }
 
         private void Unsubscribe()
         {
-            _areaService.Changed -= _refreshCallback;
+            _area.Changed -= _refreshCallback;
             _cameraTracker.PositionChanged -= _refreshCallback;
             _cameraTracker.RotationChanged -= _refreshCallback;
-            _cameraTracker.OrthoSizeChanged -= _refreshCallback;
+            _cameraTracker.SizeChanged -= _refreshCallback;
             _cameraTracker.ProjectionChanged -= _refreshCallback;
         }
     }

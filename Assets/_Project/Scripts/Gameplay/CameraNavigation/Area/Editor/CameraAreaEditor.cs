@@ -1,8 +1,4 @@
 #if UNITY_EDITOR
-using System;
-using System.Collections.Generic;
-using BattleBase.UpdateService;
-using BattleBase.UpdateService.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,9 +7,6 @@ namespace BattleBase.Gameplay.CameraNavigation.Editor
     [CustomEditor(typeof(CameraArea))]
     public class CameraAreaEditor : UnityEditor.Editor
     {
-        private const float SphereRadius = 0.1f;
-        private const int CornerCount = 4;
-
         private static readonly Color s_AreaColor = Color.blue;
         private static readonly Color s_OvershootColor = Color.red;
         private static readonly Color s_FrustumColor = Color.yellow;
@@ -27,62 +20,77 @@ namespace BattleBase.Gameplay.CameraNavigation.Editor
             if (area.ShouldDrawGizmos == false)
                 return;
 
+            ScreenOrientationType screenOrientationType = GetGameViewOrientation();
+            GroundProjection areaGround = area.GetAreaGroundProjection(screenOrientationType);
+            GroundProjection overshoot = area.GetOvershootGroundProjection(screenOrientationType);
+
+            DrawProjection(areaGround, s_AreaColor);
+            DrawProjection(overshoot, s_OvershootColor);
+
             Camera mainCamera = Camera.main;
 
             if (mainCamera == null)
                 return;
 
-            IUpdater updater = new EditorUpdater();
-            ICameraAreaService areaService = new CameraAreaService(area);
-            ICameraTracker cameraTracker = new CameraTracker(mainCamera, updater, area.Config);
-            IFrustumProjectionService projectionService = new FrustumProjectionService(areaService, cameraTracker);
+            CameraProjectionType projectionType = mainCamera.orthographic ? CameraProjectionType.Orthographic : CameraProjectionType.Perspective;
 
-            DrawArea(areaService);
-            DrawFrustum(projectionService);
+            FrustumProjection projection = CameraProjectionUtility.GetFrustumProjection(
+                mainCamera,
+                area.GroundPlane,
+                projectionType);
 
-            IDisposable[] disposables = new IDisposable[]
+            GroundProjection frustum = CameraProjectionUtility.ConvertProjection(
+                projection,
+                area.CameraRig.transform,
+                FrustumSizeType.MaximumWidthAndHeight,
+                FrustumShape.Trapezoid);
+
+            DrawProjection(frustum, s_FrustumColor);
+        }
+
+        private static void DrawProjection(GroundProjection area, Color color)
+        {
+            Gizmos.color = color;
+
+            Gizmos.DrawLine(area.LeftUp, area.RightUp);
+            Gizmos.DrawLine(area.RightUp, area.RightDown);
+            Gizmos.DrawLine(area.RightDown, area.LeftDown);
+            Gizmos.DrawLine(area.LeftDown, area.LeftUp);
+
+            GUIStyle labelStyle = new()
             {
-                projectionService as IDisposable,
-                cameraTracker as IDisposable,
-                areaService as IDisposable,
-                updater as IDisposable,
+                alignment = TextAnchor.MiddleCenter,
+                normal = { textColor = color },
+                fontSize = 9,
             };
 
-            DisposeAll(disposables);
+            Handles.color = Color.white;
+
+            DrawLabelWithBackground(area.LeftUp, "Left Up", labelStyle);
+            DrawLabelWithBackground(area.RightUp, "Right Up", labelStyle);
+            DrawLabelWithBackground(area.LeftDown, "Left Down", labelStyle);
+            DrawLabelWithBackground(area.RightDown, "Right Down", labelStyle);
+            DrawLabelWithBackground(area.Center, $"Width: {area.Width:F2}\nHeight: {area.Height:F2}", labelStyle);
         }
 
-        private static void DisposeAll(params IDisposable[] disposables)
+        private static ScreenOrientationType GetGameViewOrientation()
         {
-            foreach (IDisposable disposable in disposables)
-                disposable?.Dispose();
+            Vector2 gameViewSize = Handles.GetMainGameViewSize();
+
+            return gameViewSize.y > gameViewSize.x ? ScreenOrientationType.Portrait : ScreenOrientationType.Landscape;
         }
 
-        private static void DrawArea(ICameraAreaService areaService)
+        private static void DrawLabelWithBackground(Vector3 worldPos, string text, GUIStyle labelStyle)
         {
-            Bounds bounds = areaService.AreaBounds;
-            Bounds overshootBounds = areaService.OvershootBounds;
+            Handles.BeginGUI();
+            Vector2 screenPos = HandleUtility.WorldToGUIPoint(worldPos);
+            Vector2 textSize = labelStyle.CalcSize(new(text));
+            Rect rect = new(screenPos.x - textSize.x / 2, screenPos.y - textSize.y / 2, textSize.x, textSize.y);
+            Rect bgRect = new(rect.x - 2, rect.y - 2, rect.width + 4, rect.height + 4);
 
-            Gizmos.color = s_AreaColor;
-            Gizmos.DrawWireCube(bounds.center, bounds.size);
-
-            Gizmos.color = s_OvershootColor;
-            Gizmos.DrawWireCube(overshootBounds.center, overshootBounds.size);
-        }
-
-        private static void DrawFrustum(IFrustumProjectionService projectionService)
-        {
-            IReadOnlyList<Vector3> corners = projectionService.Corners;
-
-            if (corners.Count != CornerCount)
-                return;
-
-            Gizmos.color = s_FrustumColor;
-
-            foreach (Vector3 corner in corners)
-                Gizmos.DrawWireSphere(corner, SphereRadius);
-
-            for (int i = 0; i < corners.Count; i++)
-                Gizmos.DrawLine(corners[i], corners[(i + 1) % corners.Count]);
+            EditorGUI.DrawRect(bgRect, new Color(0f, 0f, 0f, 0.8f));
+            GUI.Label(rect, text, labelStyle);
+            Handles.EndGUI();
         }
     }
 }

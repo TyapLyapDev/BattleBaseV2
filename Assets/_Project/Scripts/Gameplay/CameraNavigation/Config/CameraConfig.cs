@@ -6,7 +6,7 @@ namespace BattleBase.Gameplay.CameraNavigation
     [CreateAssetMenu(
         fileName = nameof(CameraConfig),
         menuName = AssetMenuPaths.ScriptableObjects + nameof(CameraConfig))]
-    public class CameraConfig : ScriptableObject, ICameraInertiaConfig, ICameraSnapBackConfig, IOrthographicSizeConfig, ICameraTrackingConfig
+    public class CameraConfig : ScriptableObject, ICameraInertiaConfig, ICameraSnapBackConfig, IProjectionSizeConfig, ICameraTrackingConfig
     {
         [Header("Snap back")]
         [SerializeField][Min(0f)] private float _snapBackSpeed = 3;
@@ -15,6 +15,11 @@ namespace BattleBase.Gameplay.CameraNavigation
         [SerializeField][Min(0f)] private Vector2 _referenceValuePortraitOrientation = new(1080, 1920);
         [SerializeField][Min(0f)] private float _minimumOrthoSize = 0.3f;
         [SerializeField][Min(0f)] private float _maximumOrthoSize = 1.2f;
+
+        [Header("Field of View")]
+        [SerializeField][Min(1f)] private float _minimumFOV = 9f;
+        [SerializeField][Min(1f)] private float _maximumFOV = 52f;
+        [SerializeField][Min(0.1f)] private float _landscapeFovFactor = 1.42130621f;
 
         [Header("Inertia")]
         [SerializeField][Min(0f)] private float _inertiaDamping = 5f;
@@ -33,6 +38,10 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         public float MaximumOrthoSize => _maximumOrthoSize;
 
+        public float MinimumFOV => _minimumFOV;
+
+        public float MaximumFOV => _maximumFOV;
+
         public float InertiaDamping => _inertiaDamping;
 
         public float InertiaExtraDampingFactor => _inertiaExtraDampingFactor;
@@ -48,5 +57,7 @@ namespace BattleBase.Gameplay.CameraNavigation
         public int InertiaSmoothingWindow => _inertiaSmoothingWindow;
 
         public Vector2 ReferenceValuePortraitOrientation => _referenceValuePortraitOrientation;
+
+        public float LandscapeFovFactor => _landscapeFovFactor;
     }
 }

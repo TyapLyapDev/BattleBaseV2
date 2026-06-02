@@ -5,85 +5,56 @@ namespace BattleBase.Gameplay.CameraNavigation
 {
     public class GameSceneCameraOrientationAdapter : ICameraOrientationAdapter, IDisposable
     {
-        private const float AspectComparisonEpsilon = 0.01f;
-
-        private readonly Camera _camera;
         private readonly IScreenSizeTracker _screenSizeTracker;
         private readonly IScreenOrientationTracker _orientationTracker;
         private readonly IVerticalFactorCalculator _verticalFactorCalculator;
-        private readonly ICameraTracker _cameraTracker;
-        private readonly float _originalMinimumOrthoSize;
-        private readonly float _originalMaximumOrthoSize;
+        private readonly ICameraHandle _cameraHandle;
+        private readonly IProjectionSizeConfig _config;
         private readonly float _portraitReferenceAspect;
 
-        private float _effectiveMinimumOrthoSize;
-        private float _effectiveMaximumOrthoSize;
+        private float _originalMinimumSize;
+        private float _originalMaximumSize;
+
+        private float _effectiveMinimumSize;
+        private float _effectiveMaximumSize;
         private float _lastAspect;
 
         public GameSceneCameraOrientationAdapter(
-            Camera camera,
             IScreenSizeTracker screenSizeTracker,
             IScreenOrientationTracker orientationTracker,
-            IOrthographicSizeConfig config,
+            IProjectionSizeConfig config,
             IVerticalFactorCalculator verticalFactorCalculator,
-            ICameraTracker cameraTracker)
+            ICameraHandle cameraHandle)
         {
-            _camera = camera != null ? camera : throw new ArgumentNullException(nameof(camera));
             _screenSizeTracker = screenSizeTracker ?? throw new ArgumentNullException(nameof(screenSizeTracker));
             _orientationTracker = orientationTracker ?? throw new ArgumentNullException(nameof(orientationTracker));
             _verticalFactorCalculator = verticalFactorCalculator ?? throw new ArgumentNullException(nameof(verticalFactorCalculator));
-            _cameraTracker = cameraTracker ?? throw new ArgumentNullException(nameof(cameraTracker));
-
-            if (config == null)
-                throw new ArgumentNullException(nameof(config));
-
-            _originalMinimumOrthoSize = config.MinimumOrthoSize;
-            _originalMaximumOrthoSize = config.MaximumOrthoSize;
-
-            if (_originalMinimumOrthoSize < 0)
-                throw new ArgumentOutOfRangeException(nameof(_originalMinimumOrthoSize), _originalMinimumOrthoSize, "Value must be positive");
-
-            if (_originalMaximumOrthoSize < 0)
-                throw new ArgumentOutOfRangeException(nameof(_originalMaximumOrthoSize), _originalMaximumOrthoSize, "Value must be positive");
-
-            if (_originalMaximumOrthoSize <= _originalMinimumOrthoSize)
-            {
-                throw new ArgumentException(
-                    $"MaximumOrtoSize ({_originalMaximumOrthoSize}) must be greater than MinimumOrtoSize ({_originalMinimumOrthoSize})",
-                    nameof(config));
-            }
+            _cameraHandle = cameraHandle ?? throw new ArgumentNullException(nameof(cameraHandle));
+            _config = config ?? throw new ArgumentNullException(nameof(config));
 
             _portraitReferenceAspect =
                 Mathf.Min(config.ReferenceValuePortraitOrientation.x, config.ReferenceValuePortraitOrientation.y) /
                 Mathf.Max(config.ReferenceValuePortraitOrientation.x, config.ReferenceValuePortraitOrientation.y);
 
-            _lastAspect = GetAspect();
+            UpdateOriginalSize();
             RecalculateEffectiveZoomBounds();
-            AdjustCameraSizeToCurrentValue01();
 
-            _screenSizeTracker.SizeChanged += OnSizeChanged;
-            _orientationTracker.OrientationChanged += OnOrientationChanged;
-            _cameraTracker.RotationChanged += OnRotationChanged;
+            _screenSizeTracker.SizeChanged += OnScreenSizeChanged;
+            OnScreenSizeChanged();
         }
 
         public event Action Changed;
 
-        public float CurrentOrthoSize => _camera.orthographicSize;
+        public float CurrentSize => Mathf.Clamp(_cameraHandle.ProjectionSize, MinimumSize, MaximumSize);
 
-        public float MinimumOrthoSize => _effectiveMinimumOrthoSize;
+        public float MinimumSize => _effectiveMinimumSize;
 
-        public float MaximumOrthoSize => _effectiveMaximumOrthoSize;
+        public float MaximumSize => _effectiveMaximumSize;
 
         public void Dispose()
         {
             if (_screenSizeTracker != null)
-                _screenSizeTracker.SizeChanged -= OnSizeChanged;
-
-            if (_orientationTracker != null)
-                _orientationTracker.OrientationChanged -= OnOrientationChanged;
-
-            if (_cameraTracker != null)
-                _cameraTracker.RotationChanged -= OnRotationChanged;
+                _screenSizeTracker.SizeChanged -= OnScreenSizeChanged;
         }
 
         private void RecalculateEffectiveZoomBounds()
@@ -92,40 +63,27 @@ namespace BattleBase.Gameplay.CameraNavigation
             {
                 float currentAspect = GetAspect();
                 float multiplier = _portraitReferenceAspect / currentAspect;
-                _effectiveMinimumOrthoSize = _originalMinimumOrthoSize * multiplier;
-                _effectiveMaximumOrthoSize = _originalMaximumOrthoSize * multiplier;
+
+                _effectiveMinimumSize = _originalMinimumSize * multiplier;
+                _effectiveMaximumSize = _originalMaximumSize * multiplier;
             }
             else
             {
                 float multiplier = _portraitReferenceAspect;
                 float verticalFactor = _verticalFactorCalculator.CalculateVerticalFactor();
                 float tiltCompensation = 1f / verticalFactor;
-
                 multiplier *= tiltCompensation;
 
-                _effectiveMinimumOrthoSize = _originalMinimumOrthoSize * multiplier;
-                _effectiveMaximumOrthoSize = _originalMaximumOrthoSize * multiplier;
+                _effectiveMinimumSize = _originalMinimumSize * multiplier;
+                _effectiveMaximumSize = _originalMaximumSize * multiplier;
             }
-        }
-
-        private void AdjustCameraSizeToCurrentValue01()
-        {
-            float currentValue01 = ComputeValue01(_camera.orthographicSize, _originalMinimumOrthoSize, _originalMaximumOrthoSize);
-            SetCameraSizeFromValue01(currentValue01);
-        }
-
-        private void SetCameraSizeFromValue01(float value01)
-        {
-            float newSize = ComputeSizeFromValue01(value01);
-            _camera.orthographicSize = Mathf.Clamp(newSize, _effectiveMinimumOrthoSize, _effectiveMaximumOrthoSize);
-            InvokeChanged();
         }
 
         private float ComputeValue01(float currentSize, float minimumBound, float maximumBound)
         {
             float range = maximumBound - minimumBound;
 
-            if (range <= float.Epsilon)
+            if (range <= 0)
                 throw new ArgumentOutOfRangeException(nameof(range), range, "Value must be positive");
 
             float normalized = (currentSize - minimumBound) / range;
@@ -139,37 +97,43 @@ namespace BattleBase.Gameplay.CameraNavigation
         private void InvokeChanged() =>
             Changed?.Invoke();
 
+        private void SetCameraSizeFromValue01(float value01)
+        {
+            float newSize = ComputeSizeFromValue01(value01);
+            _cameraHandle.SetProjectionSize(Mathf.Clamp(newSize, _effectiveMinimumSize, _effectiveMaximumSize));
+        }
+
         private float ComputeSizeFromValue01(float value01) =>
-            _effectiveMaximumOrthoSize - value01 * (_effectiveMaximumOrthoSize - _effectiveMinimumOrthoSize);
+            _effectiveMaximumSize - value01 * (_effectiveMaximumSize - _effectiveMinimumSize);
 
-        private void OnSizeChanged()
+        private void UpdateOriginalSize()
+        {
+            if (_cameraHandle.ProjectionType == CameraProjectionType.Orthographic)
+            {
+                _originalMinimumSize = _config.MinimumOrthoSize;
+                _originalMaximumSize = _config.MaximumOrthoSize;
+            }
+            else
+            {
+                _originalMinimumSize = _config.MinimumFOV;
+                _originalMaximumSize = _config.MaximumFOV;
+            }
+        }
+
+        private void OnScreenSizeChanged()
         {
             float currentAspect = GetAspect();
 
-            if (Mathf.Abs(currentAspect - _lastAspect) < AspectComparisonEpsilon)
-                return;
+            if (Mathf.Approximately(currentAspect, _lastAspect) == false)
+            {
+                _lastAspect = currentAspect;
+                UpdateOriginalSize();
+                float currentValue01 = ComputeValue01(CurrentSize, _effectiveMinimumSize, _effectiveMaximumSize);
+                RecalculateEffectiveZoomBounds();
+                SetCameraSizeFromValue01(currentValue01);
 
-            _lastAspect = currentAspect;
-
-            float currentValue01 = ComputeValue01(_camera.orthographicSize, _effectiveMinimumOrthoSize, _effectiveMaximumOrthoSize);
-            RecalculateEffectiveZoomBounds();
-            SetCameraSizeFromValue01(currentValue01);
-        }
-
-        private void OnOrientationChanged()
-        {
-            float currentValue01 = ComputeValue01(_camera.orthographicSize, _effectiveMinimumOrthoSize, _effectiveMaximumOrthoSize);
-            RecalculateEffectiveZoomBounds();
-            SetCameraSizeFromValue01(currentValue01);
-        }
-
-        private void OnRotationChanged()
-        {
-            float currentAspect = GetAspect();
-            _lastAspect = currentAspect;
-            float currentValue01 = ComputeValue01(_camera.orthographicSize, _effectiveMinimumOrthoSize, _effectiveMaximumOrthoSize);
-            RecalculateEffectiveZoomBounds();
-            SetCameraSizeFromValue01(currentValue01);
+                InvokeChanged();
+            }
         }
     }
 }
