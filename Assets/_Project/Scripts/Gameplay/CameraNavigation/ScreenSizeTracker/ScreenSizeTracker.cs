@@ -9,24 +9,24 @@ namespace BattleBase.Gameplay.CameraNavigation
         private static readonly UpdateType s_UpdateType = UpdateType.Update;
 
         private readonly IUpdater _updater;
-        private int _cachedWidth;
-        private int _cachedHeight;
+        private int _lastWidth;
+        private int _lastHeight;
 
         public ScreenSizeTracker(IUpdater updater)
         {
             _updater = updater ?? throw new ArgumentNullException(nameof(updater));
 
-            _cachedWidth = Screen.width;
-            _cachedHeight = Screen.height;
+            _lastWidth = Screen.width;
+            _lastHeight = Screen.height;
 
             _updater.Subscribe(OnUpdate, s_UpdateType);
         }
 
         public event Action SizeChanged;
 
-        public int Width => _cachedWidth;
+        public int Width => Screen.width;
 
-        public int Height => _cachedHeight;
+        public int Height => Screen.height;
 
         public void Dispose() =>
             _updater.Unsubscribe(OnUpdate, s_UpdateType);
@@ -36,11 +36,11 @@ namespace BattleBase.Gameplay.CameraNavigation
             int currentWidth = Screen.width;
             int currentHeight = Screen.height;
 
-            if (currentWidth == _cachedWidth && currentHeight == _cachedHeight)
+            if (currentWidth == _lastWidth && currentHeight == _lastHeight)
                 return;
 
-            _cachedWidth = currentWidth;
-            _cachedHeight = currentHeight;
+            _lastWidth = currentWidth;
+            _lastHeight = currentHeight;
 
             SizeChanged?.Invoke();
         }

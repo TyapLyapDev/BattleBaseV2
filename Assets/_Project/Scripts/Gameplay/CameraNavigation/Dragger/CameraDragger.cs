@@ -47,5 +47,11 @@ namespace BattleBase.Gameplay.CameraNavigation
 
             _snapBack.ClampByOvershoot();
         }
+
+        public void RestorePosition(Vector3 currentPosition, Vector3 positionToRestore)
+        {
+            _dragApplier.RestorePosition(currentPosition, positionToRestore);
+            _snapBack.ClampByOvershoot();
+        }
     }
 }

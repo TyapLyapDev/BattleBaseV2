@@ -59,7 +59,7 @@ namespace BattleBase.Gameplay.MiniMap
             {
                 WorldCenter = _frustumProjectionService.Projection.Center,
                 AreaBounds = _cameraArea.AreaBounds,
-                MiniMapRect = _miniMapArea.Rect
+                MiniMapRect = _miniMapArea.Rect,
             };
 
             Vector2 position = _calculator.Calculate(input);

@@ -40,7 +40,7 @@ namespace BattleBase.Gameplay.CameraNavigation
             RecalculateEffectiveZoomBounds();
 
             _screenSizeTracker.SizeChanged += OnScreenSizeChanged;
-            OnScreenSizeChanged();
+            Refresh();
         }
 
         public event Action Changed;
@@ -55,6 +55,22 @@ namespace BattleBase.Gameplay.CameraNavigation
         {
             if (_screenSizeTracker != null)
                 _screenSizeTracker.SizeChanged -= OnScreenSizeChanged;
+        }
+
+        public void Refresh()
+        {
+            float currentAspect = GetAspect();
+
+            if (Mathf.Approximately(currentAspect, _lastAspect) == false)
+            {
+                _lastAspect = currentAspect;
+                UpdateOriginalSize();
+                float currentValue01 = ComputeValue01(CurrentSize, _effectiveMinimumSize, _effectiveMaximumSize);
+                RecalculateEffectiveZoomBounds();
+                SetCameraSizeFromValue01(currentValue01);
+
+                InvokeChanged();
+            }
         }
 
         private void RecalculateEffectiveZoomBounds()
@@ -120,20 +136,7 @@ namespace BattleBase.Gameplay.CameraNavigation
             }
         }
 
-        private void OnScreenSizeChanged()
-        {
-            float currentAspect = GetAspect();
-
-            if (Mathf.Approximately(currentAspect, _lastAspect) == false)
-            {
-                _lastAspect = currentAspect;
-                UpdateOriginalSize();
-                float currentValue01 = ComputeValue01(CurrentSize, _effectiveMinimumSize, _effectiveMaximumSize);
-                RecalculateEffectiveZoomBounds();
-                SetCameraSizeFromValue01(currentValue01);
-
-                InvokeChanged();
-            }
-        }
+        private void OnScreenSizeChanged() =>
+            Refresh();
     }
 }

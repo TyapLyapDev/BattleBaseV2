@@ -51,19 +51,20 @@ namespace BattleBase.Gameplay.CameraNavigation
             float rightShift = ComputeRightAxis(deltaTime);
             float forwardShift = ComputeForwardAxis(deltaTime);
 
-            Transform rig = _cameraHandle.CameraRig.transform;
+            Transform rig = _cameraHandle.CameraRigTransform;
 
             Vector3 moveDelta = rig.right * rightShift + rig.forward * forwardShift;
-            Vector3 newPosition = rig.position - moveDelta;
+            Vector3 newPosition = _cameraHandle.CameraRigPosition - moveDelta;
+            newPosition.y = 0;
 
             _cameraHandle.SetCameraRigPosition(newPosition);
         }
 
         private float ComputeRightAxis(float deltaTime) =>
-            ComputeAxisShift(_inertiaRight, deltaTime, _cameraHandle.CameraRig.transform.right);
+            ComputeAxisShift(_inertiaRight, deltaTime, _cameraHandle.CameraRigTransform.right);
 
         private float ComputeForwardAxis(float deltaTime) =>
-            ComputeAxisShift(_inertiaForward, deltaTime, _cameraHandle.CameraRig.transform.forward);
+            ComputeAxisShift(_inertiaForward, deltaTime, _cameraHandle.CameraRigTransform.forward);
 
         private float ComputeAxisShift(
             AxisInertiaHandler inertia,
@@ -103,7 +104,7 @@ namespace BattleBase.Gameplay.CameraNavigation
                 return deltaMove;
             }
 
-            Vector3 worldCorrection = _snapBack.GetCorrectionAreaBounds(_cameraHandle.CameraRig.transform.position);
+            Vector3 worldCorrection = _snapBack.GetCorrectionAreaBounds(_cameraHandle.CameraRigPosition);
             float snapbackShift = -Vector3.Dot(worldCorrection, axisDirection);
             float maximumSnapback = _speed * deltaTime;
             snapbackShift = Mathf.Clamp(snapbackShift, -maximumSnapback, maximumSnapback);

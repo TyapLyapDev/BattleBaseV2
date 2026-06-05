@@ -93,7 +93,7 @@ namespace BattleBase.Gameplay.MiniMap
 
             Vector3 delta = targetWorldPoint - _frustumService.Projection.Center;
             
-            _cameraHandle.SetCameraRigPosition(_cameraHandle.CameraRig.transform.position + delta);
+            _cameraHandle.SetCameraRigPosition(_cameraHandle.CameraRigPosition + delta);
 
             _frustumService.Refresh();
             _snapBack.ClampByOvershoot();

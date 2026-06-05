@@ -6,10 +6,10 @@ namespace BattleBase.Gameplay.CameraNavigation
 {
     public sealed class CameraHandle : ICameraHandle, IDisposable
     {
-        private static readonly UpdateType s_UpdateType = UpdateType.Update;
+        private static readonly UpdateType s_UpdateType = UpdateType.LateUpdate;
 
         private readonly Camera _camera;
-        private readonly CameraRig _cameraRig;
+        private readonly Transform _cameraRig;
         private readonly Transform _cameraTransform;
         private readonly IUpdater _updater;
         private readonly ICameraTrackingConfig _config;
@@ -22,7 +22,12 @@ namespace BattleBase.Gameplay.CameraNavigation
         public CameraHandle(Camera camera, CameraRig cameraRig, IUpdater updater, ICameraTrackingConfig config)
         {
             _camera = camera != null ? camera : throw new ArgumentNullException(nameof(camera));
-            _cameraRig = cameraRig != null ? cameraRig : throw new ArgumentNullException(nameof(cameraRig));
+
+            if(cameraRig == null)
+                throw new ArgumentNullException(nameof(cameraRig));
+
+            _cameraRig = cameraRig.transform;
+
             _updater = updater ?? throw new ArgumentNullException(nameof(updater));
             _config = config ?? throw new ArgumentNullException(nameof(config));
 
@@ -38,11 +43,9 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         public Camera Camera => _camera;
 
-        public CameraRig CameraRig => _cameraRig;
+        public Transform CameraRigTransform => _cameraRig;
 
-        public Vector3 Position => _cameraTransform.position;
-
-        public Quaternion Rotation => _cameraTransform.rotation;
+        public Vector3 CameraRigPosition => _cameraRig.position;
 
         public CameraProjectionType ProjectionType => _camera.orthographic
             ? CameraProjectionType.Orthographic
@@ -50,7 +53,7 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         public float ProjectionSize => ProjectionType == CameraProjectionType.Orthographic
             ? _camera.orthographicSize
-            : _camera.fieldOfView;
+            : _camera.transform.localPosition.y;
 
         public void Dispose() =>
             _updater?.Unsubscribe(OnUpdate, s_UpdateType);
@@ -60,11 +63,18 @@ namespace BattleBase.Gameplay.CameraNavigation
             if (Mathf.Approximately(ProjectionSize, size) == false)
             {
                 if (ProjectionType == CameraProjectionType.Orthographic)
+                {
                     _camera.orthographicSize = size;
+                }
                 else
-                    _camera.fieldOfView = size;
+                {
+                    Vector3 position = _camera.transform.localPosition;
+                    position.y = size;
+                    _camera.transform.localPosition = position;
+                }
 
-                SizeChanged?.Invoke();
+                TrackPosition();
+                TrackSize();
             }
         }
 
@@ -124,9 +134,9 @@ namespace BattleBase.Gameplay.CameraNavigation
             }
             else if (ProjectionType == CameraProjectionType.Perspective)
             {
-                if (Math.Abs(_camera.fieldOfView - _lastProjectionSize) > Mathf.Epsilon)
+                if (Math.Abs(_camera.transform.localPosition.y - _lastProjectionSize) > Mathf.Epsilon)
                 {
-                    _lastProjectionSize = _camera.fieldOfView;
+                    _lastProjectionSize = _camera.transform.localPosition.y;
 
                     SizeChanged?.Invoke();
                 }

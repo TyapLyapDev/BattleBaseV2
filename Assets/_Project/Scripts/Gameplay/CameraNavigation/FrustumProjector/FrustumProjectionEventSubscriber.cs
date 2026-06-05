@@ -18,6 +18,7 @@ namespace BattleBase.Gameplay.CameraNavigation
             _refreshCallback = refreshCallback ?? throw new ArgumentNullException(nameof(refreshCallback));
 
             Subscribe();
+            OnChanged();
         }
 
         public void Dispose() =>
@@ -25,20 +26,23 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         private void Subscribe()
         {
-            _area.Changed += _refreshCallback;
-            _cameraTracker.PositionChanged += _refreshCallback;
-            _cameraTracker.RotationChanged += _refreshCallback;
-            _cameraTracker.SizeChanged += _refreshCallback;
-            _cameraTracker.ProjectionChanged += _refreshCallback;
+            _area.Changed += OnChanged;
+            _cameraTracker.PositionChanged += OnChanged;
+            _cameraTracker.RotationChanged += OnChanged;
+            _cameraTracker.SizeChanged += OnChanged;
+            _cameraTracker.ProjectionChanged += OnChanged;
         }
 
         private void Unsubscribe()
         {
-            _area.Changed -= _refreshCallback;
-            _cameraTracker.PositionChanged -= _refreshCallback;
-            _cameraTracker.RotationChanged -= _refreshCallback;
-            _cameraTracker.SizeChanged -= _refreshCallback;
-            _cameraTracker.ProjectionChanged -= _refreshCallback;
+            _area.Changed -= OnChanged;
+            _cameraTracker.PositionChanged -= OnChanged;
+            _cameraTracker.RotationChanged -= OnChanged;
+            _cameraTracker.SizeChanged -= OnChanged;
+            _cameraTracker.ProjectionChanged -= OnChanged;
         }
+
+        private void OnChanged() =>
+            _refreshCallback?.Invoke();
     }
 }

@@ -9,5 +9,7 @@ namespace BattleBase.Gameplay.CameraNavigation
         public void Disable();
 
         public void Update(float deltaTime, Vector3? worldDragDelta);
+
+        public void RestorePosition(Vector3 currentPosition, Vector3 positionToRestore);
     }
 }

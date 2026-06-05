@@ -12,11 +12,9 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         public Camera Camera { get; }
 
-        public CameraRig CameraRig { get; }
+        public Transform CameraRigTransform { get; }
 
-        public Vector3 Position { get; }
-
-        public Quaternion Rotation { get; }
+        public Vector3 CameraRigPosition { get; }
 
         public float ProjectionSize { get; }
 

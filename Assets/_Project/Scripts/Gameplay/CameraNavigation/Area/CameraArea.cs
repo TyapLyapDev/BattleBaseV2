@@ -29,7 +29,7 @@ namespace BattleBase.Gameplay.CameraNavigation
 
         public Bounds OvershootBounds => _overshoot.bounds;
 
-        public Plane GroundPlane => new(transform.up, GroundPlaneY);
+        public Plane GroundPlane => new(-transform.up, GroundPlaneY);
 
         public float Resistance => _resistance;
 

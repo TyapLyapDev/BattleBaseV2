@@ -44,6 +44,7 @@ namespace BattleBase.Gameplay.CameraNavigation
             AdjustCameraSizeToCurrentValue01();
 
             _orientationTracker.OrientationChanged += OnOrientationChanged;
+            Refresh();
         }
 
         public event Action Changed;
@@ -58,6 +59,13 @@ namespace BattleBase.Gameplay.CameraNavigation
         {
             if (_orientationTracker != null)
                 _orientationTracker.OrientationChanged -= OnOrientationChanged;
+        }
+
+        public void Refresh()
+        {
+            float currentValue01 = ComputeValue01(_camera.orthographicSize, _effectiveMinimumOrthoSize, _effectiveMaximumOrthoSize);
+            RecalculateEffectiveZoomBounds();
+            SetCameraSizeFromValue01(currentValue01);
         }
 
         private void RecalculateEffectiveZoomBounds()
@@ -108,11 +116,7 @@ namespace BattleBase.Gameplay.CameraNavigation
         private void InvokeChanged() =>
             Changed?.Invoke();
 
-        private void OnOrientationChanged()
-        {
-            float currentValue01 = ComputeValue01(_camera.orthographicSize, _effectiveMinimumOrthoSize, _effectiveMaximumOrthoSize);
-            RecalculateEffectiveZoomBounds();
-            SetCameraSizeFromValue01(currentValue01);
-        }
+        private void OnOrientationChanged() =>
+            Refresh();
     }
 }

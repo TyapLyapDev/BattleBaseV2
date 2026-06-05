@@ -8,13 +8,16 @@ namespace BattleBase.Gameplay.CameraNavigation
     {
         private readonly IFrustumProjectionService _frustumProjectionService;
         private readonly ICameraArea _cameraArea;
+        private readonly ICameraHandle _cameraHandle;
 
         public CameraSnapBack(
             IFrustumProjectionService frustumProjectionService,
-            ICameraArea cameraArea)
+            ICameraArea cameraArea,
+            ICameraHandle cameraHandle)
         {
             _frustumProjectionService = frustumProjectionService ?? throw new ArgumentNullException(nameof(frustumProjectionService));
             _cameraArea = cameraArea ?? throw new ArgumentNullException(nameof(cameraArea));
+            _cameraHandle = cameraHandle ?? throw new ArgumentNullException(nameof(cameraHandle));
         }
 
         public void ClampByOvershoot()
@@ -24,7 +27,7 @@ namespace BattleBase.Gameplay.CameraNavigation
             Vector3 position = cameraRig.position;
 
             Vector3 correction = GetCorrectionOvershootBounds(position);
-            cameraRig.position = position + correction;
+            _cameraHandle.SetCameraRigPosition(position + correction);
         }
 
         public Vector3 GetCorrectionAreaBounds(Vector3 position) =>

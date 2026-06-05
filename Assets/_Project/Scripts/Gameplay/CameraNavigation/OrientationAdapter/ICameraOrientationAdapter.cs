@@ -11,5 +11,7 @@ namespace BattleBase.Gameplay.CameraNavigation
         public float MinimumSize { get; }
 
         public float MaximumSize { get; }
+
+        public void Refresh();
     }
 }

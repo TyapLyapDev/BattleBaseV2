@@ -5,13 +5,21 @@ namespace BattleBase.Gameplay.CameraNavigation
 {
     public class CameraZoom : ICameraZoom, IDisposable
     {
+        private readonly ICameraDragger _dragger;
         private readonly ICameraHandle _cameraHandle;
         private readonly ICameraOrientationAdapter _orientationAdapter;
+        private readonly IFrustumProjectionService _projectionService;
 
-        public CameraZoom(ICameraHandle cameraHandle, ICameraOrientationAdapter orientationAdapter)
+        public CameraZoom(
+            ICameraHandle cameraHandle,
+            ICameraOrientationAdapter orientationAdapter,
+            IFrustumProjectionService projectionService,
+            ICameraDragger dragger)
         {
             _cameraHandle = cameraHandle ?? throw new ArgumentNullException(nameof(cameraHandle));
             _orientationAdapter = orientationAdapter ?? throw new ArgumentNullException(nameof(orientationAdapter));
+            _projectionService = projectionService ?? throw new ArgumentNullException(nameof(projectionService));
+            _dragger = dragger ?? throw new ArgumentNullException(nameof(dragger));
 
             _orientationAdapter.Changed += OnOrientationAdapterChanged;
         }
@@ -55,7 +63,7 @@ namespace BattleBase.Gameplay.CameraNavigation
             {
                 float newSize = CurrentSize - zoomDelta.Value;
                 SetCameraSize(newSize);
-            }           
+            }
         }
 
         private void SetCameraSize(float size)
@@ -64,10 +72,13 @@ namespace BattleBase.Gameplay.CameraNavigation
 
             if (Mathf.Approximately(CurrentSize, clamped) == false)
             {
+                Vector3 positionToRestore = _projectionService.Projection.Center;
                 _cameraHandle.SetProjectionSize(clamped);
+                Vector3 currentPosition = _projectionService.Projection.Center;
+                _dragger.RestorePosition(currentPosition, positionToRestore);
 
                 Changed?.Invoke();
-            }            
+            }
         }
 
         private void OnOrientationAdapterChanged() =>

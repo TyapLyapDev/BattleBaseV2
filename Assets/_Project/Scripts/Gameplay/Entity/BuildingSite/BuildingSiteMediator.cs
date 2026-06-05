@@ -44,7 +44,10 @@ namespace BattleBase.Gameplay
         private void OnClickDetected(Collider collider)
         {
             if (collider == null)
+            {
+                HandleUnselectEntity();
                 return;
+            }
 
             if (collider.TryGetComponent(out IEntity entity))
             {
